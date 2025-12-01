@@ -1,24 +1,59 @@
 {
   "title": "租金支付追踪器",
-  "description": "一个帮助计算您租金的模块",
+  "description": "跟踪租金支付、电费使用和预付款",
   "items": {
-    "entry": "条目"
+    "payment": "支付记录"
   },
   "modals": {
-    "entry": {
-      "create": "创建条目",
-      "update": "更新条目"
+    "payment": {
+      "create": "创建支付记录",
+      "update": "更新支付记录"
     }
   },
   "inputs": {
-    "name": "条目名称",
-    "icon": "条目图标",
-    "color": "条目颜色"
+    "month": "月份",
+    "year": "年份",
+    "previousMeterReading": "上次电表读数",
+    "currentMeterReading": "本次电表读数",
+    "electricityRate": "电费单价（令吉/度）",
+    "utilityBill": "杂费（令吉）",
+    "rentalFee": "租金（令吉）",
+    "amountPaid": "已支付金额（令吉）",
+    "meterReadingImage": "电表读数图片",
+    "bankStatement": "银行对账单",
+    "initialPrepaymentBalance": "预付款初始余额（令吉）",
+    "initialMeterReading": "初始电表读数"
   },
   "empty": {
-    "entry": {
-      "title": "还没有条目",
-      "description": "通过创建您的第一个条目开始吧。"
+    "payment": {
+      "title": "暂无支付记录",
+      "description": "开始创建您的第一条支付记录。"
     }
+  },
+  "buttons": {
+    "settings": "设置",
+    "viewMeterReadingImage": "查看电表读数图片",
+    "viewBankStatement": "查看银行对账单",
+    "print": "打印"
+  },
+  "paymentCard": {
+    "payableAmount": "应付金额",
+    "paidExcess": "已超额支付",
+    "paymentShortfall": "支付不足",
+    "meterReading": "电表读数",
+    "last": "上次",
+    "this": "本次",
+    "totalUsed": "总用电量",
+    "baseRentalFee": "基本租金",
+    "electricityBillPayable": "应付电费 ({{used}}kWh x {{rate}}/kWh)",
+    "fixedUtilityBill": "固定杂费",
+    "totalPayable": "应付总额",
+    "paymentMade": "已支付",
+    "lessTotalPayable": "<i>减：</i>应付总额",
+    "paymentExcessShortfall": "本月超额 / (不足)",
+    "prepaymentCarriedDown": "{{month}}结转预付款",
+    "prepaymentBroughtDown": "转入{{month}}预付款",
+    "computerGenerated": "此文档由计算机生成。",
+    "generatedOn": "生成于 {{date}}"
   }
 }

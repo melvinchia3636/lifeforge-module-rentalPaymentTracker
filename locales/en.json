@@ -1,24 +1,59 @@
 {
   "title": "Rental Payment Tracker",
-  "description": "A module that helps calculating your rental",
+  "description": "Track rental payments, electricity usage, and prepayments",
   "items": {
-    "entry": "Entry"
+    "payment": "Payment Entry"
   },
   "modals": {
-    "entry": {
-      "create": "Create Entry",
-      "update": "Update Entry"
+    "payment": {
+      "create": "Create Payment Entry",
+      "update": "Update Payment Entry"
     }
   },
   "inputs": {
-    "name": "Entry Name",
-    "icon": "Entry Icon",
-    "color": "Entry Color"
+    "month": "Month",
+    "year": "Year",
+    "previousMeterReading": "Previous Meter Reading",
+    "currentMeterReading": "Current Meter Reading",
+    "electricityRate": "Electricity Rate (RM/unit)",
+    "utilityBill": "Utility Bill (RM)",
+    "rentalFee": "Rental Fee (RM)",
+    "amountPaid": "Amount Paid (RM)",
+    "meterReadingImage": "Meter Reading Image",
+    "bankStatement": "Bank Statement",
+    "initialPrepaymentBalance": "Initial Prepayment Balance (RM)",
+    "initialMeterReading": "Initial Meter Reading"
   },
   "empty": {
-    "entry": {
-      "title": "No entries yet",
-      "description": "Get started by creating your first entry."
+    "payment": {
+      "title": "No payment entries yet",
+      "description": "Get started by creating your first payment entry."
     }
+  },
+  "buttons": {
+    "settings": "Settings",
+    "viewMeterReadingImage": "View Meter Reading Image",
+    "viewBankStatement": "View Bank Statement",
+    "print": "Print"
+  },
+  "paymentCard": {
+    "payableAmount": "Payable amount",
+    "paidExcess": "Paid Excess",
+    "paymentShortfall": "Payment Shortfall",
+    "meterReading": "Meter Reading",
+    "last": "Last",
+    "this": "This",
+    "totalUsed": "Total used",
+    "baseRentalFee": "Base rental fee",
+    "electricityBillPayable": "Electricity bill payable ({{used}}kWh x {{rate}}/kWh)",
+    "fixedUtilityBill": "Fixed utility bill",
+    "totalPayable": "Total Payable",
+    "paymentMade": "Payment made",
+    "lessTotalPayable": "<i>Less:</i> Total Payable",
+    "paymentExcessShortfall": "Payment Excess / (Shortfall) this month",
+    "prepaymentCarriedDown": "Prepayment c/d from {{month}}",
+    "prepaymentBroughtDown": "Prepayment b/d to {{month}}",
+    "computerGenerated": "This is a computer-generated document.",
+    "generatedOn": "Generated on {{date}}"
   }
 }

@@ -1,24 +1,59 @@
 {
-  "title": "Peng Tracker Pembayaran Sewaan",
-  "description": "Satu modul yang membantu mengira sewa anda",
+  "title": "Penjejak Pembayaran Sewa",
+  "description": "Jejaki pembayaran sewa, penggunaan elektrik, dan prabayar",
   "items": {
-    "entry": "Entri"
+    "payment": "Entri Pembayaran"
   },
   "modals": {
-    "entry": {
-      "create": "Buat Entri",
-      "update": "Kemaskini Entri"
+    "payment": {
+      "create": "Buat Entri Pembayaran",
+      "update": "Kemaskini Entri Pembayaran"
     }
   },
   "inputs": {
-    "name": "Nama Entri",
-    "icon": "Ikon Entri",
-    "color": "Warna Entri"
+    "month": "Bulan",
+    "year": "Tahun",
+    "previousMeterReading": "Bacaan Meter Sebelumnya",
+    "currentMeterReading": "Bacaan Meter Semasa",
+    "electricityRate": "Kadar Elektrik (RM/unit)",
+    "utilityBill": "Bil Utiliti (RM)",
+    "rentalFee": "Yuran Sewa (RM)",
+    "amountPaid": "Jumlah Dibayar (RM)",
+    "meterReadingImage": "Imej Bacaan Meter",
+    "bankStatement": "Penyata Bank",
+    "initialPrepaymentBalance": "Baki Prabayar Awal (RM)",
+    "initialMeterReading": "Bacaan Meter Awal"
   },
   "empty": {
-    "entry": {
-      "title": "Tiada entri lagi",
-      "description": "Mulakan dengan mencipta entri pertama anda."
+    "payment": {
+      "title": "Tiada entri pembayaran lagi",
+      "description": "Mulakan dengan mencipta entri pembayaran pertama anda."
     }
+  },
+  "buttons": {
+    "settings": "Tetapan",
+    "viewMeterReadingImage": "Lihat Imej Bacaan Meter",
+    "viewBankStatement": "Lihat Penyata Bank",
+    "print": "Cetak"
+  },
+  "paymentCard": {
+    "payableAmount": "Jumlah perlu dibayar",
+    "paidExcess": "Lebihan Dibayar",
+    "paymentShortfall": "Kekurangan Pembayaran",
+    "meterReading": "Bacaan Meter",
+    "last": "Lepas",
+    "this": "Ini",
+    "totalUsed": "Jumlah digunakan",
+    "baseRentalFee": "Yuran sewa asas",
+    "electricityBillPayable": "Bil elektrik perlu dibayar ({{used}}kWh x {{rate}}/kWh)",
+    "fixedUtilityBill": "Bil utiliti tetap",
+    "totalPayable": "Jumlah Perlu Dibayar",
+    "paymentMade": "Pembayaran dibuat",
+    "lessTotalPayable": "<i>Tolak:</i> Jumlah Perlu Dibayar",
+    "paymentExcessShortfall": "Lebihan / (Kekurangan) Pembayaran bulan ini",
+    "prepaymentCarriedDown": "Prabayar b/b dari {{month}}",
+    "prepaymentBroughtDown": "Prabayar h/b ke {{month}}",
+    "computerGenerated": "Ini adalah dokumen yang dijana oleh komputer.",
+    "generatedOn": "Dijana pada {{date}}"
   }
 }

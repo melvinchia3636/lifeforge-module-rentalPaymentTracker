@@ -14,6 +14,7 @@
     "lifeforge-ui": "workspace:*",
     "react": "^19.2.0",
     "react-i18next": "^15.1.1",
+    "react-to-print": "^3.2.0",
     "react-toastify": "^11.0.5",
     "shared": "workspace:*",
     "vite": "^7.1.9",
