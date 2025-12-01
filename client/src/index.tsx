@@ -4,6 +4,8 @@ import {
   ContextMenuItem,
   EmptyStateScreen,
   ModuleHeader,
+  Scrollbar,
+  Widget,
   WithQuery,
   useModalStore
 } from 'lifeforge-ui'
@@ -11,10 +13,14 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { InferOutput } from 'shared'
 
+import Amount from './components/Amount'
 import ModifyPaymentEntryModal from './components/ModifyPaymentEntryModal'
 import PaymentCard from './components/PaymentCard'
 import SettingsModal from './components/SettingsModal'
-import { calculateAllPrepayments } from './utils/calculations'
+import {
+  type CalculatedPayment,
+  calculateAllPrepayments
+} from './utils/calculations'
 import forgeAPI from './utils/forgeAPI'
 
 export type PaymentEntry = InferOutput<
@@ -36,7 +42,8 @@ function RentalPaymentTracker() {
 
   // Calculate all prepayments once settings and entries are loaded
   const calculations = useMemo(() => {
-    if (!entriesQuery.data || !settingsQuery.data) return new Map()
+    if (!entriesQuery.data || !settingsQuery.data)
+      return new Map<string, CalculatedPayment>()
 
     return calculateAllPrepayments(entriesQuery.data, settingsQuery.data)
   }, [entriesQuery.data, settingsQuery.data])
@@ -85,21 +92,51 @@ function RentalPaymentTracker() {
               }}
             />
           ) : (
-            <div className="space-y-4">
-              {entries.map(entry => {
-                const calc = calculations.get(entry.id)
-
-                if (!calc) return null
-
-                return (
-                  <PaymentCard
-                    key={entry.id}
-                    calculations={calc}
-                    entry={entry}
+            <Scrollbar>
+              <Widget
+                actionComponent={
+                  <Amount
+                    amount={
+                      calculations.size > 0
+                        ? Array.from(calculations.values())[
+                            calculations.size - 1
+                          ].currentPrepayment
+                        : 0
+                    }
+                    className="hidden sm:flex"
                   />
-                )
-              })}
-            </div>
+                }
+                className="mb-6 h-min"
+                icon="tabler:cash-plus"
+                namespace="apps.rentalPaymentTracker"
+                title="Prepaid Amount"
+              >
+                <Amount
+                  amount={
+                    calculations.size > 0
+                      ? Array.from(calculations.values())[calculations.size - 1]
+                          .currentPrepayment
+                      : 0
+                  }
+                  className="flex-center w-full sm:hidden"
+                />
+              </Widget>
+              <div className="space-y-4 pb-8">
+                {entries.map(entry => {
+                  const calc = calculations.get(entry.id)
+
+                  if (!calc) return null
+
+                  return (
+                    <PaymentCard
+                      key={entry.id}
+                      calculations={calc}
+                      entry={entry}
+                    />
+                  )
+                })}
+              </div>
+            </Scrollbar>
           )
         }
       </WithQuery>
