@@ -8,6 +8,20 @@
     "payment": {
       "create": "Buat Entri Pembayaran",
       "update": "Kemaskini Entri Pembayaran"
+    },
+    "deletePaymentEntry": {
+      "title": "Padam Entri Pembayaran",
+      "description": "Adakah anda pasti mahu memadam entri pembayaran ini? Tindakan ini tidak boleh dibatalkan."
+    },
+    "unlinkWalletTransaction": {
+      "title": "Nyahpaut Transaksi Dompet",
+      "description": "Adakah anda pasti mahu menyahpaut transaksi dompet? Jumlah pembayaran akan dipulihkan daripada transaksi dompet."
+    },
+    "linkWalletTransaction": {
+      "title": "Pautkan Transaksi Dompet"
+    },
+    "settings": {
+      "title": "Tetapan"
     }
   },
   "inputs": {
@@ -22,19 +36,46 @@
     "meterReadingImage": "Imej Bacaan Meter",
     "bankStatement": "Penyata Bank",
     "initialPrepaymentBalance": "Baki Prabayar Awal (RM)",
-    "initialMeterReading": "Bacaan Meter Awal"
+    "initialMeterReading": "Bacaan Meter Awal",
+    "linkWithWalletModule": "Pautkan dengan Modul Dompet",
+    "walletTemplate": "Templat Dompet",
+    "autoCreateWalletTransaction": "Auto buat Transaksi Dompet",
+    "hideDetails": "Sembunyikan Butiran"
   },
   "empty": {
     "payment": {
       "title": "Tiada entri pembayaran lagi",
       "description": "Mulakan dengan mencipta entri pembayaran pertama anda."
+    },
+    "walletModule": {
+      "title": "Modul Dompet Tidak Ditemui",
+      "description": "Sila pasang Modul Dompet untuk mengaktifkan ciri ini."
+    },
+    "walletTemplates": {
+      "title": "Tiada Templat Perbelanjaan Ditemui",
+      "description": "Sila cipta templat perbelanjaan untuk pembayaran sewa rumah dalam Modul Dompet untuk menggunakan ciri ini."
+    },
+    "linkWalletQuery": {
+      "title": "Cari Transaksi Dompet",
+      "description": "Cari transaksi dompet untuk dipautkan dengan entri pembayaran ini."
+    },
+    "noTransactionFound": {
+      "title": "Tiada transaksi ditemui",
+      "description": "Cuba laraskan carian anda untuk mencari apa yang anda cari."
+    },
+    "transactionLinked": {
+      "title": "Transaksi sudah dipautkan",
+      "description": "Medan ini dilumpuhkan kerana entri pembayaran sudah dipautkan dengan transaksi dompet. Jika anda ingin menukar jumlah yang dibayar, sila ubah melalui transaksi dompet yang dipautkan."
     }
   },
   "buttons": {
     "settings": "Tetapan",
     "viewMeterReadingImage": "Lihat Imej Bacaan Meter",
     "viewBankStatement": "Lihat Penyata Bank",
-    "print": "Cetak"
+    "print": "Cetak",
+    "linkWalletTransaction": "Pautkan Transaksi Dompet",
+    "unlinkWalletTransaction": "Nyahpaut Transaksi Dompet",
+    "linkTransaction": "Pautkan Transaksi"
   },
   "paymentCard": {
     "payableAmount": "Jumlah perlu dibayar",
@@ -54,6 +95,18 @@
     "prepaymentCarriedDown": "Prabayar b/b dari {{month}}",
     "prepaymentBroughtDown": "Prabayar h/b ke {{month}}",
     "computerGenerated": "Ini adalah dokumen yang dijana oleh komputer.",
-    "generatedOn": "Dijana pada {{date}}"
+    "generatedOn": "Dijana pada {{date}}",
+    "linkedWalletTransaction": "Transaksi Dompet yang Dipautkan"
+  },
+  "widgets": {
+    "prepaidAmount": "Jumlah Prabayar"
+  },
+  "toast": {
+    "deletePaymentEntryFailed": "Gagal memadam entri pembayaran.",
+    "unlinkWalletTransactionSuccess": "Transaksi dompet berjaya dinyahpaut",
+    "unlinkWalletTransactionFailed": "Gagal menyahpaut transaksi dompet",
+    "linkTransactionSuccess": "Transaksi berjaya dipautkan",
+    "linkTransactionFailed": "Gagal memautan transaksi",
+    "submitPaymentEntryFailed": "Gagal menghantar entri pembayaran."
   }
 }

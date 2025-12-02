@@ -11,7 +11,8 @@ function BreakdownTable({
     electricityBill,
     totalPayable,
     previousPrepayment,
-    currentPrepayment
+    currentPrepayment,
+    amountPaid
   }
 }: {
   entry: PaymentEntry
@@ -79,7 +80,7 @@ function BreakdownTable({
             {t('paymentCard.paymentMade')}
           </td>
           <td className="px-4 py-3 text-right font-medium text-green-600 dark:text-green-400">
-            {entry.amount_paid.toFixed(2)}
+            {amountPaid.toFixed(2)}
           </td>
         </tr>
         <tr className="odd:bg-bg-800/30">
@@ -102,14 +103,14 @@ function BreakdownTable({
           <td
             className={clsx(
               'px-4 py-3 text-right font-medium',
-              entry.amount_paid - totalPayable >= 0
+              amountPaid - totalPayable >= 0
                 ? 'text-green-600 dark:text-green-400'
                 : 'text-red-600 dark:text-red-400'
             )}
           >
-            {entry.amount_paid - totalPayable >= 0
-              ? (entry.amount_paid - totalPayable).toFixed(2)
-              : `(${(totalPayable - entry.amount_paid).toFixed(2)})`}
+            {amountPaid - totalPayable >= 0
+              ? (amountPaid - totalPayable).toFixed(2)
+              : `(${(totalPayable - amountPaid).toFixed(2)})`}
           </td>
         </tr>
         <tr className="odd:bg-bg-800/30">

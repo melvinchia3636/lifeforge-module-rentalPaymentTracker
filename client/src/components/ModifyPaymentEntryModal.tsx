@@ -1,7 +1,8 @@
 import type { PaymentEntry } from '@'
+import { Icon } from '@iconify/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { t } from 'i18next'
 import { FormModal, defineForm } from 'lifeforge-ui'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { type InferInput, getFormFileFieldInitialData } from 'shared'
 
@@ -21,6 +22,8 @@ export default function ModifyPaymentEntryModal({
     initialData?: PaymentEntry
   }
 }) {
+  const { t } = useTranslation('apps.rentalPaymentTracker')
+
   const qc = useQueryClient()
 
   const settingsQuery = useQuery(
@@ -40,6 +43,7 @@ export default function ModifyPaymentEntryModal({
     ).mutationOptions({
       onSuccess: () => {
         qc.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
+        qc.invalidateQueries({ queryKey: ['wallet'] })
       },
       onError: error => {
         toast.error('Failed to submit payment entry.')
@@ -84,7 +88,9 @@ export default function ModifyPaymentEntryModal({
       amount_paid: 'number',
       meter_reading_image: 'file',
       bank_statement: 'file',
-      electricity_used: 'number'
+      electricity_used: 'number',
+      auto_create_wallet_transaction: 'checkbox',
+      wallet_entry_id: 'text'
     })
     .setupFields({
       month: {
@@ -115,7 +121,19 @@ export default function ModifyPaymentEntryModal({
       amount_paid: {
         icon: 'tabler:cash',
         label: `Amount Paid`,
-        required: true
+        required: true,
+        disabled: openType === 'update' && !!initialData?.wallet_entry_id,
+        disabledReason: (
+          <div className="w-72">
+            <h3 className="mb-2 flex items-center gap-2 font-semibold">
+              <Icon className="size-5 shrink-0" icon="tabler:link" />
+              {t('empty.transactionLinked.title')}
+            </h3>
+            <p className="text-bg-500">
+              {t('empty.transactionLinked.description')}
+            </p>
+          </div>
+        )
       },
       meter_reading_image: {
         icon: 'tabler:photo',
@@ -133,6 +151,11 @@ export default function ModifyPaymentEntryModal({
           image: ['png', 'jpeg', 'webp'],
           application: ['pdf']
         }
+      },
+      auto_create_wallet_transaction: {
+        icon: 'tabler:wallet',
+        label: 'Auto create Wallet Transaction',
+        hidden: openType === 'update'
       }
     })
     .initialData({

@@ -1,6 +1,8 @@
 import type { PaymentEntry } from '@'
+import TransactionListItem from '@/components/TransactionListItem'
 import type { CalculatedPayment } from '@/utils/calculations'
 import forgeAPI from '@/utils/forgeAPI'
+import { Icon } from '@iconify/react'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { Button, ViewImageModal, useModalStore } from 'lifeforge-ui'
@@ -14,11 +16,13 @@ import MeterReadingCard from './MeterReadingCard'
 
 function DetailsSection({
   collapsed,
+  setCollapsed,
   entry,
   calculations,
   containerRef: ref
 }: {
   collapsed: boolean
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
   entry: PaymentEntry
   calculations: CalculatedPayment
   containerRef: React.RefObject<HTMLDivElement | null>
@@ -37,6 +41,24 @@ function DetailsSection({
         family: 'Onest'
       })
       .queryOptions()
+  )
+
+  const walletAvailabilityQuery = useQuery(
+    forgeAPI.modules.checkModuleAvailability
+      .input({
+        moduleId: 'wallet'
+      })
+      .queryOptions()
+  )
+
+  const walletEntryQuery = useQuery(
+    forgeAPI
+      .untyped('/wallet/transactions/getById')
+      .input({ id: entry.wallet_entry_id })
+      .queryOptions({
+        enabled:
+          walletAvailabilityQuery.data === true && !!entry.wallet_entry_id
+      })
   )
 
   const reactToPrintFn = useReactToPrint({
@@ -66,12 +88,24 @@ function DetailsSection({
       className="space-y-2 overflow-hidden transition-all duration-300"
       style={{ maxHeight: collapsed ? 0 : height }}
     >
-      <div ref={thisRef} className="space-y-2 pt-6">
+      <div ref={thisRef} className="space-y-2 p-4 pt-6">
         <MeterReadingCard entry={entry} />
         <BreakdownTable calculations={calculations} entry={entry} />
+        {walletEntryQuery.data && (
+          <div className="mt-6 space-y-3">
+            <h3 className="text-bg-500 flex items-center gap-2 text-lg font-semibold print:text-zinc-500">
+              <Icon className="size-6" icon="tabler:wallet" />
+              {t('paymentCard.linkedWalletTransaction')}
+            </h3>
+            <TransactionListItem
+              className="component-bg-lighter print:bg-zinc-100"
+              transaction={walletEntryQuery.data}
+            />
+          </div>
+        )}
         <div className="mt-8 space-y-2 print:hidden">
           {(entry.meter_reading_image || entry.bank_statement) && (
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 md:flex-row">
               {entry.meter_reading_image && (
                 <Button
                   className="flex-1"
@@ -120,6 +154,14 @@ function DetailsSection({
             {t('buttons.print')}
           </Button>
         </div>
+        <Button
+          className="mt-4 w-full print:hidden"
+          icon="tabler:chevron-up"
+          variant="plain"
+          onClick={() => setCollapsed(true)}
+        >
+          Hide Details
+        </Button>
       </div>
     </div>
   )

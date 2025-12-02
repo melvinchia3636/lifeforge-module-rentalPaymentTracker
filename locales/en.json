@@ -8,6 +8,20 @@
     "payment": {
       "create": "Create Payment Entry",
       "update": "Update Payment Entry"
+    },
+    "deletePaymentEntry": {
+      "title": "Delete Payment Entry",
+      "description": "Are you sure you want to delete this payment entry? This action cannot be undone."
+    },
+    "unlinkWalletTransaction": {
+      "title": "Unlink Wallet Transaction",
+      "description": "Are you sure you want to unlink the wallet transaction? The payment amount will be restored from the wallet transaction."
+    },
+    "linkWalletTransaction": {
+      "title": "Link Wallet Transaction"
+    },
+    "settings": {
+      "title": "Settings"
     }
   },
   "inputs": {
@@ -22,19 +36,46 @@
     "meterReadingImage": "Meter Reading Image",
     "bankStatement": "Bank Statement",
     "initialPrepaymentBalance": "Initial Prepayment Balance (RM)",
-    "initialMeterReading": "Initial Meter Reading"
+    "initialMeterReading": "Initial Meter Reading",
+    "linkWithWalletModule": "Link with Wallet Module",
+    "walletTemplate": "Wallet Template",
+    "autoCreateWalletTransaction": "Auto create Wallet Transaction",
+    "collapseDetails": "Collapse Details"
   },
   "empty": {
     "payment": {
       "title": "No payment entries yet",
       "description": "Get started by creating your first payment entry."
+    },
+    "walletModule": {
+      "title": "Wallet Module Not Found",
+      "description": "Please install the Wallet Module to enable this feature."
+    },
+    "walletTemplates": {
+      "title": "No Expense Templates Found",
+      "description": "Please create expense templates for house rental payment in the Wallet Module to use this feature."
+    },
+    "linkWalletQuery": {
+      "title": "Search Wallet Transactions",
+      "description": "Search for wallet transactions to link with this payment entry."
+    },
+    "noTransactionFound": {
+      "title": "No transactions found",
+      "description": "Try adjusting your search to find what you're looking for."
+    },
+    "transactionLinked": {
+      "title": "Transaction already linked",
+      "description": "This field is disabled because the payment entry is already linked to a wallet transaction. If you wish to change the amount paid, please change it via the linked wallet transaction."
     }
   },
   "buttons": {
     "settings": "Settings",
     "viewMeterReadingImage": "View Meter Reading Image",
     "viewBankStatement": "View Bank Statement",
-    "print": "Print"
+    "print": "Print",
+    "linkWalletTransaction": "Link Wallet Transaction",
+    "unlinkWalletTransaction": "Unlink Wallet Transaction",
+    "linkTransaction": "Link Transaction"
   },
   "paymentCard": {
     "payableAmount": "Payable amount",
@@ -54,6 +95,18 @@
     "prepaymentCarriedDown": "Prepayment c/d from {{month}}",
     "prepaymentBroughtDown": "Prepayment b/d to {{month}}",
     "computerGenerated": "This is a computer-generated document.",
-    "generatedOn": "Generated on {{date}}"
+    "generatedOn": "Generated on {{date}}",
+    "linkedWalletTransaction": "Linked Wallet Transaction"
+  },
+  "widgets": {
+    "prepaidAmount": "Prepaid Amount"
+  },
+  "toast": {
+    "deletePaymentEntryFailed": "Failed to delete the payment entry.",
+    "unlinkWalletTransactionSuccess": "Wallet transaction unlinked successfully",
+    "unlinkWalletTransactionFailed": "Failed to unlink wallet transaction",
+    "linkTransactionSuccess": "Transaction linked successfully",
+    "linkTransactionFailed": "Failed to link transaction",
+    "submitPaymentEntryFailed": "Failed to submit payment entry."
   }
 }

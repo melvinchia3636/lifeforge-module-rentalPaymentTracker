@@ -1,15 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import {
   Button,
   ContextMenuItem,
   EmptyStateScreen,
+  FAB,
   ModuleHeader,
   Scrollbar,
   Widget,
   WithQuery,
   useModalStore
 } from 'lifeforge-ui'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { InferOutput } from 'shared'
 
@@ -40,19 +41,84 @@ function RentalPaymentTracker() {
     forgeAPI.rentalPaymentTracker.settings.get.queryOptions()
   )
 
-  // Calculate all prepayments once settings and entries are loaded
+  // Clean up orphaned wallet links on mount
+  useEffect(() => {
+    const cleanup = async () => {
+      try {
+        await forgeAPI.rentalPaymentTracker.entries.cleanupOrphanedWalletLinks.mutate(
+          {}
+        )
+      } catch (error) {
+        // Silent fail - this is a background cleanup task
+        console.debug('Wallet link cleanup completed or skipped', error)
+      }
+    }
+
+    cleanup()
+  }, [])
+
+  // Get wallet entry IDs from entries that have them
+  const walletEntryIds = useMemo(() => {
+    if (!entriesQuery.data) return []
+
+    return entriesQuery.data
+      .filter(entry => entry.wallet_entry_id)
+      .map(entry => ({ entryId: entry.id, walletId: entry.wallet_entry_id }))
+  }, [entriesQuery.data])
+
+  // Fetch wallet transactions for entries that have wallet_entry_id
+  const walletQueries = useQueries({
+    queries: walletEntryIds.map(({ entryId, walletId }) => ({
+      queryKey: ['wallet', 'transaction', walletId],
+      queryFn: async () => {
+        const result = await forgeAPI
+          .untyped('/wallet/transactions/getById')
+          .input({ id: walletId })
+          .query()
+
+        return { entryId, amount: (result as { amount: number }).amount }
+      },
+      enabled: !!walletId,
+      // Always fetch fresh data when component mounts
+      refetchOnMount: 'always',
+      // Refetch when window regains focus
+      refetchOnWindowFocus: true,
+      // Consider data stale immediately so it always refetches
+      staleTime: 0
+    }))
+  })
+
+  // Build a map of entry ID -> wallet amount
+  const walletAmounts = useMemo(() => {
+    const map = new Map<string, number>()
+
+    for (const query of walletQueries) {
+      if (query.data) {
+        map.set(query.data.entryId, query.data.amount)
+      }
+    }
+
+    return map
+  }, [walletQueries])
+
+  // Calculate all prepayments once settings, entries, and wallet amounts are loaded
   const calculations = useMemo(() => {
     if (!entriesQuery.data || !settingsQuery.data)
       return new Map<string, CalculatedPayment>()
 
-    return calculateAllPrepayments(entriesQuery.data, settingsQuery.data)
-  }, [entriesQuery.data, settingsQuery.data])
+    return calculateAllPrepayments(
+      entriesQuery.data,
+      settingsQuery.data,
+      walletAmounts
+    )
+  }, [entriesQuery.data, settingsQuery.data, walletAmounts])
 
   return (
     <>
       <ModuleHeader
         actionButton={
           <Button
+            className="hidden md:flex"
             icon="tabler:plus"
             tProps={{
               item: t('items.payment')
@@ -140,6 +206,15 @@ function RentalPaymentTracker() {
           )
         }
       </WithQuery>
+      <FAB
+        className="fixed right-6 bottom-6 md:hidden"
+        icon="tabler:plus"
+        onClick={() => {
+          open(ModifyPaymentEntryModal, {
+            openType: 'create'
+          })
+        }}
+      />
     </>
   )
 }

@@ -7,5 +7,5 @@ export default {
   routes: {
     '/': lazy(() => import('@'))
   },
-  category: 'Financial'
+  category: 'Finance'
 } satisfies ModuleConfig

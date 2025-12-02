@@ -14,6 +14,7 @@ const rentalPaymentTrackerSchemas = {
       meter_reading_image: z.string(),
       bank_statement: z.string(),
       amount_paid: z.number(),
+      wallet_entry_id: z.string(),
       created: z.string(),
       updated: z.string()
     }),
@@ -190,6 +191,20 @@ const rentalPaymentTrackerSchemas = {
           type: 'number'
         },
         {
+          autogeneratePattern: '',
+          hidden: false,
+          id: 'text1318321462',
+          max: 0,
+          min: 0,
+          name: 'wallet_entry_id',
+          pattern: '',
+          presentable: false,
+          primaryKey: false,
+          required: false,
+          system: false,
+          type: 'text'
+        },
+        {
           hidden: false,
           id: 'autodate2990389176',
           name: 'created',
@@ -220,7 +235,9 @@ const rentalPaymentTrackerSchemas = {
       initial_meter_reading: z.number(),
       electricity_rate: z.number(),
       utility_bill: z.number(),
-      rental_fee: z.number()
+      rental_fee: z.number(),
+      link_with_wallet: z.boolean(),
+      wallet_template_id: z.string()
     }),
     raw: {
       id: 'pbc_2081798340',
@@ -305,6 +322,29 @@ const rentalPaymentTrackerSchemas = {
           required: false,
           system: false,
           type: 'number'
+        },
+        {
+          hidden: false,
+          id: 'bool3936015936',
+          name: 'link_with_wallet',
+          presentable: false,
+          required: false,
+          system: false,
+          type: 'bool'
+        },
+        {
+          autogeneratePattern: '',
+          hidden: false,
+          id: 'text1882714907',
+          max: 0,
+          min: 0,
+          name: 'wallet_template_id',
+          pattern: '',
+          presentable: false,
+          primaryKey: false,
+          required: false,
+          system: false,
+          type: 'text'
         }
       ],
       indexes: [],

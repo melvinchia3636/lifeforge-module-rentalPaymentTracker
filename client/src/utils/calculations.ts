@@ -10,6 +10,7 @@ export interface CalculatedPayment {
   totalPayable: number
   previousPrepayment: number
   currentPrepayment: number
+  amountPaid: number
 }
 
 /**
@@ -59,16 +60,21 @@ export function calculatePaymentValues(
     electricityBill,
     totalPayable,
     previousPrepayment,
-    currentPrepayment
+    currentPrepayment,
+    amountPaid: entry.amount_paid
   }
 }
 
 /**
  * Calculate prepayment balances for all entries in chronological order
+ * @param entries - List of payment entries
+ * @param settings - Settings containing initial prepayment and other defaults
+ * @param walletAmounts - Optional map of entry ID to wallet transaction amount (when wallet_entry_id is present)
  */
 export function calculateAllPrepayments(
   entries: PaymentEntry[],
-  settings: Settings
+  settings: Settings,
+  walletAmounts?: Map<string, number>
 ): Map<string, CalculatedPayment> {
   const calculations = new Map<string, CalculatedPayment>()
 
@@ -88,14 +94,20 @@ export function calculateAllPrepayments(
 
     const previousPrepayment = runningPrepayment
 
-    const currentPrepayment =
-      previousPrepayment + entry.amount_paid - totalPayable
+    // Use wallet transaction amount if linked, otherwise use entry's amount_paid
+    const amountPaid =
+      entry.wallet_entry_id && walletAmounts?.has(entry.id)
+        ? walletAmounts.get(entry.id)!
+        : entry.amount_paid
+
+    const currentPrepayment = previousPrepayment + amountPaid - totalPayable
 
     calculations.set(entry.id, {
       electricityBill,
       totalPayable,
       previousPrepayment,
-      currentPrepayment
+      currentPrepayment,
+      amountPaid
     })
 
     // Update running prepayment for next iteration

@@ -1,4 +1,5 @@
 import { forgeController, forgeRouter } from '@functions/routes'
+import { checkModulesAvailability } from '@functions/utils/checkModulesAvailability'
 import { SCHEMAS } from '@schema'
 
 const get = forgeController
@@ -12,6 +13,17 @@ const get = forgeController
       .execute()
 
     if (existing.length > 0) {
+      const walletModuleAvailable = checkModulesAvailability('wallet')
+
+      // If wallet module is not available, ensure link_with_wallet is false
+      if (!walletModuleAvailable) {
+        return await pb.update
+          .collection('rental_payment_tracker__settings')
+          .id(existing[0].id)
+          .data({ link_with_wallet: false, wallet_template_id: '' })
+          .execute()
+      }
+
       return existing[0]
     }
 
