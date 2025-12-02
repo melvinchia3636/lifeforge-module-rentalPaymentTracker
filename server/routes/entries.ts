@@ -103,6 +103,7 @@ export const create = forgeController
       const walletModuleAvailable = checkModulesAvailability('wallet')
 
       if (
+        !body.auto_create_wallet_transaction ||
         !settingsData.link_with_wallet ||
         !settingsData.wallet_template_id ||
         !walletModuleAvailable

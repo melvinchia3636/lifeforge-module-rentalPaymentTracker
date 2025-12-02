@@ -155,7 +155,10 @@ export default function ModifyPaymentEntryModal({
       auto_create_wallet_transaction: {
         icon: 'tabler:wallet',
         label: 'Auto create Wallet Transaction',
-        hidden: openType === 'update'
+        hidden:
+          openType === 'update' ||
+          !settings.link_with_wallet ||
+          !settings.wallet_template_id
       }
     })
     .initialData({

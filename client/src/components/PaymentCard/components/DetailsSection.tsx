@@ -92,7 +92,7 @@ function DetailsSection({
         <MeterReadingCard entry={entry} />
         <BreakdownTable calculations={calculations} entry={entry} />
         {walletEntryQuery.data && (
-          <div className="mt-6 space-y-3">
+          <div className="mt-6 space-y-3 print:hidden">
             <h3 className="text-bg-500 flex items-center gap-2 text-lg font-semibold print:text-zinc-500">
               <Icon className="size-6" icon="tabler:wallet" />
               {t('paymentCard.linkedWalletTransaction')}

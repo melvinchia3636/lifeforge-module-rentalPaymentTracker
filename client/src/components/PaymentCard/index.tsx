@@ -26,7 +26,7 @@ export default function PaymentCard({ entry, calculations }: PaymentCardProps) {
   return (
     <Card
       ref={ref}
-      className="flex flex-col overflow-hidden p-0! print:aspect-[1/1.414] print:w-full print:bg-white print:p-12 print:font-[Onest]"
+      className="flex flex-col overflow-hidden p-0! print:aspect-[1/1.414] print:w-full print:bg-white print:p-8! print:p-12 print:font-[Onest]"
     >
       <Header
         breakdownCollapsed={breakdownCollapsed}

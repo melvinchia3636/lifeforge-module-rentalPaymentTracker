@@ -10,7 +10,7 @@ import {
   WithQuery,
   useModalStore
 } from 'lifeforge-ui'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { InferOutput } from 'shared'
 
@@ -33,8 +33,12 @@ function RentalPaymentTracker() {
 
   const open = useModalStore(state => state.open)
 
+  const [ready, setReady] = useState(false)
+
   const entriesQuery = useQuery(
-    forgeAPI.rentalPaymentTracker.entries.list.queryOptions()
+    forgeAPI.rentalPaymentTracker.entries.list.queryOptions({
+      enabled: ready
+    })
   )
 
   const settingsQuery = useQuery(
@@ -51,6 +55,8 @@ function RentalPaymentTracker() {
       } catch (error) {
         // Silent fail - this is a background cleanup task
         console.debug('Wallet link cleanup completed or skipped', error)
+      } finally {
+        setReady(true)
       }
     }
 

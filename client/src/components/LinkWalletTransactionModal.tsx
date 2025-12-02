@@ -12,9 +12,9 @@ import {
 } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { AutoSizer } from 'react-virtualized'
 import { usePromiseLoading } from 'shared'
-
-import TransactionListItem from '../TransactionListItem'
+import TransactionListItem from './TransactionListItem'
 
 function LinkWalletTransactionModal({
   data: { entry },
@@ -125,30 +125,44 @@ function LinkWalletTransactionModal({
                   />
                 </div>
               ) : (
-                <Scrollbar autoHeight className="mt-6">
-                  <ul className="space-y-3">
-                    {transactions.map(transaction => (
-                      <li
-                        key={transaction.id}
-                        className={`cursor-pointer border-2 transition-all ${
-                          selectedTransactionId?.id === transaction.id
-                            ? 'border-custom-500'
-                            : 'border-transparent'
-                        } rounded-lg`}
-                        onClick={() => {
-                          setSelectedTransactionId(old =>
-                            old?.id === transaction.id ? null : transaction
-                          )
+                <div className="h-full min-h-0 flex-1">
+                  <AutoSizer>
+                    {({ width, height }) => (
+                      <Scrollbar
+                        className="mt-6"
+                        style={{
+                          width,
+                          height
                         }}
                       >
-                        <TransactionListItem
-                          className="component-bg-lighter"
-                          transaction={transaction}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </Scrollbar>
+                        <ul className="space-y-3">
+                          {transactions.map(transaction => (
+                            <li
+                              key={transaction.id}
+                              className={`cursor-pointer border-2 transition-all ${
+                                selectedTransactionId?.id === transaction.id
+                                  ? 'border-custom-500'
+                                  : 'border-transparent'
+                              } rounded-lg`}
+                              onClick={() => {
+                                setSelectedTransactionId(old =>
+                                  old?.id === transaction.id
+                                    ? null
+                                    : transaction
+                                )
+                              }}
+                            >
+                              <TransactionListItem
+                                className="component-bg-lighter"
+                                transaction={transaction}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </Scrollbar>
+                    )}
+                  </AutoSizer>
+                </div>
               )}
             </>
           )}
