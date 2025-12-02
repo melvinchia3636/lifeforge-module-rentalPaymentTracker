@@ -39,8 +39,7 @@
     "initialMeterReading": "初始電錶讀數",
     "linkWithWalletModule": "與錢包模組關聯",
     "walletTemplate": "錢包範本",
-    "autoCreateWalletTransaction": "自動建立錢包交易",
-    "hideDetails": "隱藏詳情"
+    "autoCreateWalletTransaction": "自動建立錢包交易"
   },
   "empty": {
     "payment": {
@@ -75,7 +74,8 @@
     "print": "列印",
     "linkWalletTransaction": "關聯錢包交易",
     "unlinkWalletTransaction": "取消關聯錢包交易",
-    "linkTransaction": "關聯交易"
+    "linkTransaction": "關聯交易",
+    "collapseDetails": "收起詳情"
   },
   "paymentCard": {
     "payableAmount": "應付金額",

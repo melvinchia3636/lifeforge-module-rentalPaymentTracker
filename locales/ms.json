@@ -39,8 +39,7 @@
     "initialMeterReading": "Bacaan Meter Awal",
     "linkWithWalletModule": "Pautkan dengan Modul Dompet",
     "walletTemplate": "Templat Dompet",
-    "autoCreateWalletTransaction": "Auto buat Transaksi Dompet",
-    "hideDetails": "Sembunyikan Butiran"
+    "autoCreateWalletTransaction": "Auto buat Transaksi Dompet"
   },
   "empty": {
     "payment": {
@@ -75,7 +74,8 @@
     "print": "Cetak",
     "linkWalletTransaction": "Pautkan Transaksi Dompet",
     "unlinkWalletTransaction": "Nyahpaut Transaksi Dompet",
-    "linkTransaction": "Pautkan Transaksi"
+    "linkTransaction": "Pautkan Transaksi",
+    "collapseDetails": "Runtuhkan Butiran"
   },
   "paymentCard": {
     "payableAmount": "Jumlah perlu dibayar",

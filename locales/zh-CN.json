@@ -39,8 +39,7 @@
     "initialMeterReading": "初始电表读数",
     "linkWithWalletModule": "与钱包模块关联",
     "walletTemplate": "钱包模板",
-    "autoCreateWalletTransaction": "自动创建钱包交易",
-    "hideDetails": "隐藏详情"
+    "autoCreateWalletTransaction": "自动创建钱包交易"
   },
   "empty": {
     "payment": {
@@ -75,7 +74,8 @@
     "print": "打印",
     "linkWalletTransaction": "关联钱包交易",
     "unlinkWalletTransaction": "取消关联钱包交易",
-    "linkTransaction": "关联交易"
+    "linkTransaction": "关联交易",
+    "collapseDetails": "收起详情"
   },
   "paymentCard": {
     "payableAmount": "应付金额",

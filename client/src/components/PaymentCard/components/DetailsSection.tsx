@@ -110,6 +110,7 @@ function DetailsSection({
                 <Button
                   className="flex-1"
                   icon="tabler:photo"
+                  namespace="apps.rentalPaymentTracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -121,13 +122,14 @@ function DetailsSection({
                     )
                   }
                 >
-                  {t('buttons.viewMeterReadingImage')}
+                  View Meter Reading Image
                 </Button>
               )}
               {
                 <Button
                   className="flex-1"
                   icon="tabler:report-money"
+                  namespace="apps.rentalPaymentTracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -139,7 +141,7 @@ function DetailsSection({
                     )
                   }
                 >
-                  {t('buttons.viewBankStatement')}
+                  View Bank Statement
                 </Button>
               }
             </div>
@@ -148,19 +150,21 @@ function DetailsSection({
             className="mt-4 w-full"
             icon="tabler:printer"
             loading={fontQuery.isLoading}
+            namespace="apps.rentalPaymentTracker"
             variant="primary"
             onClick={reactToPrintFn}
           >
-            {t('buttons.print')}
+            print
           </Button>
         </div>
         <Button
           className="mt-4 w-full print:hidden"
           icon="tabler:chevron-up"
+          namespace="apps.rentalPaymentTracker"
           variant="plain"
           onClick={() => setCollapsed(true)}
         >
-          Hide Details
+          collapse Details
         </Button>
       </div>
     </div>

@@ -39,8 +39,7 @@
     "initialMeterReading": "Initial Meter Reading",
     "linkWithWalletModule": "Link with Wallet Module",
     "walletTemplate": "Wallet Template",
-    "autoCreateWalletTransaction": "Auto create Wallet Transaction",
-    "collapseDetails": "Collapse Details"
+    "autoCreateWalletTransaction": "Auto create Wallet Transaction"
   },
   "empty": {
     "payment": {
@@ -75,7 +74,8 @@
     "print": "Print",
     "linkWalletTransaction": "Link Wallet Transaction",
     "unlinkWalletTransaction": "Unlink Wallet Transaction",
-    "linkTransaction": "Link Transaction"
+    "linkTransaction": "Link Transaction",
+    "collapseDetails": "Collapse Details"
   },
   "paymentCard": {
     "payableAmount": "Payable amount",
