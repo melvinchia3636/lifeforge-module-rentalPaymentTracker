@@ -1,6 +1,7 @@
+import { SCHEMAS } from '@schema'
+
 import { forgeController, forgeRouter } from '@functions/routes'
 import { checkModulesAvailability } from '@functions/utils/checkModulesAvailability'
-import { SCHEMAS } from '@schema'
 
 const get = forgeController
   .query()

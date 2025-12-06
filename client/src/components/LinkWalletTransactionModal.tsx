@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { AutoSizer } from 'react-virtualized'
 import { usePromiseLoading } from 'shared'
+
 import TransactionListItem from './TransactionListItem'
 
 function LinkWalletTransactionModal({
