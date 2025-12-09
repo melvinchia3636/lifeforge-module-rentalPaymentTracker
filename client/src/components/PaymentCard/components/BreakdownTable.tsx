@@ -34,7 +34,7 @@ function BreakdownTable({
       </thead>
       <tbody>
         {/* Total Payable Breakdown */}
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             {t('paymentCard.baseRentalFee')}
           </td>
@@ -42,7 +42,7 @@ function BreakdownTable({
             {entry.rental_fee.toFixed(2)}
           </td>
         </tr>
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             {t('paymentCard.electricityBillPayable', {
               used: entry.electricity_used,
@@ -53,7 +53,7 @@ function BreakdownTable({
             {electricityBill.toFixed(2)}
           </td>
         </tr>
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             {t('paymentCard.fixedUtilityBill')}
           </td>
@@ -63,7 +63,7 @@ function BreakdownTable({
         </tr>
 
         {/* Total Payable */}
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-800 dark:text-bg-100 px-4 py-3 font-semibold">
             {t('paymentCard.totalPayable')}:
           </td>
@@ -75,7 +75,7 @@ function BreakdownTable({
         </tr>
 
         {/* Payment Reconciliation */}
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             {t('paymentCard.paymentMade')}
           </td>
@@ -83,7 +83,7 @@ function BreakdownTable({
             {amountPaid.toFixed(2)}
           </td>
         </tr>
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             <Trans
               i18nKey="paymentCard.lessTotalPayable"
@@ -96,7 +96,7 @@ function BreakdownTable({
         </tr>
 
         {/* Excess/Shortfall */}
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 font-medium print:text-zinc-500">
             {t('paymentCard.paymentExcessShortfall')}:
           </td>
@@ -113,7 +113,7 @@ function BreakdownTable({
               : `(${(totalPayable - amountPaid).toFixed(2)})`}
           </td>
         </tr>
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             {t('paymentCard.prepaymentCarriedDown', {
               month: dayjs()
@@ -129,7 +129,7 @@ function BreakdownTable({
         </tr>
 
         {/* Final Prepayment */}
-        <tr className="odd:bg-bg-800/30">
+        <tr className="odd:bg-bg-200/30 dark:odd:bg-bg-800/30">
           <td className="text-bg-800 dark:text-bg-100 px-4 py-3 font-semibold">
             {t('paymentCard.prepaymentBroughtDown', {
               month: dayjs()

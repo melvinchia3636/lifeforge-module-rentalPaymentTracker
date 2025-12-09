@@ -98,7 +98,7 @@ function DetailsSection({
               {t('paymentCard.linkedWalletTransaction')}
             </h3>
             <TransactionListItem
-              className="component-bg-lighter print:bg-zinc-100"
+              className="component-bg-lighter hover:bg-bg-200! dark:hover:bg-bg-800! print:bg-zinc-100"
               transaction={walletEntryQuery.data}
             />
           </div>
