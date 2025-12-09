@@ -193,7 +193,7 @@ function RentalPaymentTracker() {
                   className="flex-center w-full sm:hidden"
                 />
               </Widget>
-              <div className="space-y-4 pb-8">
+              <div className="space-y-3 pb-8">
                 {entries.map(entry => {
                   const calc = calculations.get(entry.id)
 
