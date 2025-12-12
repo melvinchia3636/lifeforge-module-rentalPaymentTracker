@@ -1,7 +1,6 @@
 import type { PaymentEntry } from '@'
 import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useDebounce } from '@uidotdev/usehooks'
 import {
   Button,
   EmptyStateScreen,
@@ -33,8 +32,6 @@ function LinkWalletTransactionModal({
     amount: number
   } | null>(null)
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 300)
-
   const transactionQuery = useQuery<
     {
       id: string
@@ -44,11 +41,11 @@ function LinkWalletTransactionModal({
     forgeAPI
       .untyped('/wallet/transactions/list')
       .input({
-        q: debouncedSearchQuery,
+        q: searchQuery,
         type: 'expenses'
       })
       .queryOptions({
-        enabled: debouncedSearchQuery.length > 0
+        enabled: searchQuery.length > 0
       })
   )
 
@@ -98,11 +95,12 @@ function LinkWalletTransactionModal({
       />
       <SearchInput
         className="component-bg-lighter"
+        debounceMs={300}
         searchTarget="transactions"
         value={searchQuery}
         onChange={setSearchQuery}
       />
-      {debouncedSearchQuery.length === 0 ? (
+      {searchQuery.length === 0 ? (
         <div className="flex-center flex-1">
           <EmptyStateScreen
             icon="tabler:search"
