@@ -19,7 +19,6 @@ const rentalPaymentTrackerSchemas = {
       updated: z.string()
     }),
     raw: {
-      id: 'pbc_1769806214',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: '@request.auth.id != ""',
@@ -31,7 +30,6 @@ const rentalPaymentTrackerSchemas = {
         {
           autogeneratePattern: '[a-z0-9]{15}',
           hidden: false,
-          id: 'text3208210256',
           max: 15,
           min: 15,
           name: 'id',
@@ -44,7 +42,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number2394296326',
           max: null,
           min: null,
           name: 'month',
@@ -56,7 +53,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number3145888567',
           max: null,
           min: null,
           name: 'year',
@@ -68,7 +64,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number2307573910',
           max: null,
           min: null,
           name: 'previous_meter_reading',
@@ -80,7 +75,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number2427755035',
           max: null,
           min: null,
           name: 'current_meter_reading',
@@ -92,7 +86,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number3286209738',
           max: null,
           min: null,
           name: 'electricity_used',
@@ -104,7 +97,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number1702152427',
           max: null,
           min: null,
           name: 'electricity_rate',
@@ -116,7 +108,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number82493876',
           max: null,
           min: null,
           name: 'utility_bill',
@@ -128,7 +119,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number3213384553',
           max: null,
           min: null,
           name: 'rental_fee',
@@ -140,9 +130,8 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'file2819049208',
           maxSelect: 1,
-          maxSize: 0,
+          maxSize: 9999999999,
           mimeTypes: [
             'image/jpeg',
             'image/png',
@@ -160,7 +149,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'file3006662639',
           maxSelect: 1,
           maxSize: 0,
           mimeTypes: [
@@ -180,7 +168,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number2484990468',
           max: null,
           min: null,
           name: 'amount_paid',
@@ -193,7 +180,6 @@ const rentalPaymentTrackerSchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text1318321462',
           max: 0,
           min: 0,
           name: 'wallet_entry_id',
@@ -206,7 +192,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'autodate2990389176',
           name: 'created',
           onCreate: true,
           onUpdate: false,
@@ -216,7 +201,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'autodate3332085495',
           name: 'updated',
           onCreate: true,
           onUpdate: true,
@@ -240,7 +224,6 @@ const rentalPaymentTrackerSchemas = {
       wallet_template_id: z.string()
     }),
     raw: {
-      id: 'pbc_2081798340',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: '@request.auth.id != ""',
@@ -252,7 +235,6 @@ const rentalPaymentTrackerSchemas = {
         {
           autogeneratePattern: '[a-z0-9]{15}',
           hidden: false,
-          id: 'text3208210256',
           max: 15,
           min: 15,
           name: 'id',
@@ -265,7 +247,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number1437297728',
           max: null,
           min: null,
           name: 'initial_prepayment',
@@ -277,7 +258,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number2766594637',
           max: null,
           min: null,
           name: 'initial_meter_reading',
@@ -289,7 +269,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number1702152427',
           max: null,
           min: null,
           name: 'electricity_rate',
@@ -301,7 +280,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number82493876',
           max: null,
           min: null,
           name: 'utility_bill',
@@ -313,7 +291,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'number3213384553',
           max: null,
           min: null,
           name: 'rental_fee',
@@ -325,7 +302,6 @@ const rentalPaymentTrackerSchemas = {
         },
         {
           hidden: false,
-          id: 'bool3936015936',
           name: 'link_with_wallet',
           presentable: false,
           required: false,
@@ -335,7 +311,6 @@ const rentalPaymentTrackerSchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text1882714907',
           max: 0,
           min: 0,
           name: 'wallet_template_id',

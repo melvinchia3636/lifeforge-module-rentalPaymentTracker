@@ -28,10 +28,10 @@
     // Path Mapping
     "paths": {
       "@": [
-        "./src/index"
+        "./index"
       ],
       "@/*": [
-        "./src/*"
+        "./*"
       ],
       "@server/*": [
         "../../../server/src/*"
@@ -39,8 +39,7 @@
     }
   },
   "include": [
-    "./src/**/*",
-    "./manifest.ts"
+    "./**/*",
   ],
   "references": [
     {
