@@ -1,8 +1,4 @@
 import type { PaymentEntry } from '@'
-import LinkWalletTransactionModal from '@/components/LinkWalletTransactionModal'
-import ModifyPaymentEntryModal from '@/components/ModifyPaymentEntryModal'
-import type { CalculatedPayment } from '@/utils/calculations'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -17,6 +13,11 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { usePersonalization } from 'shared'
 import COLORS from 'tailwindcss/colors'
+
+import LinkWalletTransactionModal from '@/components/LinkWalletTransactionModal'
+import ModifyPaymentEntryModal from '@/components/ModifyPaymentEntryModal'
+import type { CalculatedPayment } from '@/utils/calculations'
+import forgeAPI from '@/utils/forgeAPI'
 
 function Header({
   entry,
@@ -35,7 +36,7 @@ function Header({
 
   const { language } = usePersonalization()
 
-  const { t } = useTranslation('apps.rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const { totalPayable, electricityBill, amountPaid } = calculations
 
@@ -50,7 +51,7 @@ function Header({
   )
 
   const removeEntryMutation = useMutation(
-    forgeAPI.rentalPaymentTracker.entries.remove
+    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.remove
       .input({
         id: entry.id
       })
@@ -65,7 +66,7 @@ function Header({
   )
 
   const unlinkWalletMutation = useMutation(
-    forgeAPI.rentalPaymentTracker.entries.unlinkWalletTransaction.mutationOptions(
+    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.unlinkWalletTransaction.mutationOptions(
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
@@ -159,7 +160,7 @@ function Header({
                 <ContextMenuItem
                   icon="tabler:wallet"
                   label="Link Wallet Transaction"
-                  namespace="apps.rentalPaymentTracker"
+                  namespace="apps.melvinchia3636$rentalPaymentTracker"
                   onClick={() => {
                     open(LinkWalletTransactionModal, { entry })
                   }}
@@ -169,7 +170,7 @@ function Header({
                 <ContextMenuItem
                   icon="tabler:unlink"
                   label="Unlink Wallet Transaction"
-                  namespace="apps.rentalPaymentTracker"
+                  namespace="apps.melvinchia3636$rentalPaymentTracker"
                   onClick={handleUnlinkWallet}
                 />
               )}

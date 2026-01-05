@@ -1,7 +1,4 @@
 import type { PaymentEntry } from '@'
-import TransactionListItem from '@/components/TransactionListItem'
-import type { CalculatedPayment } from '@/utils/calculations'
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -10,6 +7,10 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 import { useDivSize } from 'shared'
+
+import TransactionListItem from '@/components/TransactionListItem'
+import type { CalculatedPayment } from '@/utils/calculations'
+import forgeAPI from '@/utils/forgeAPI'
 
 import BreakdownTable from './BreakdownTable'
 import MeterReadingCard from './MeterReadingCard'
@@ -33,7 +34,7 @@ function DetailsSection({
 
   const open = useModalStore(state => state.open)
 
-  const { t } = useTranslation('apps.rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const fontQuery = useQuery(
     forgeAPI.user.personalization.getGoogleFont
@@ -110,7 +111,7 @@ function DetailsSection({
                 <Button
                   className="flex-1"
                   icon="tabler:photo"
-                  namespace="apps.rentalPaymentTracker"
+                  namespace="apps.melvinchia3636$rentalPaymentTracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -129,7 +130,7 @@ function DetailsSection({
                 <Button
                   className="flex-1"
                   icon="tabler:report-money"
-                  namespace="apps.rentalPaymentTracker"
+                  namespace="apps.melvinchia3636$rentalPaymentTracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -150,7 +151,7 @@ function DetailsSection({
             className="mt-4 w-full"
             icon="tabler:printer"
             loading={fontQuery.isLoading}
-            namespace="apps.rentalPaymentTracker"
+            namespace="apps.melvinchia3636$rentalPaymentTracker"
             variant="primary"
             onClick={reactToPrintFn}
           >
@@ -160,7 +161,7 @@ function DetailsSection({
         <Button
           className="mt-4 w-full print:hidden"
           icon="tabler:chevron-up"
-          namespace="apps.rentalPaymentTracker"
+          namespace="apps.melvinchia3636$rentalPaymentTracker"
           variant="plain"
           onClick={() => setCollapsed(true)}
         >

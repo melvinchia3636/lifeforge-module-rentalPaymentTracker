@@ -1,9 +1,11 @@
 import type { InferOutput } from 'shared'
 
 import type { PaymentEntry } from '../index'
-import forgeAPI from '../utils/forgeAPI'
+import forgeAPI from './forgeAPI'
 
-type Settings = InferOutput<typeof forgeAPI.rentalPaymentTracker.settings.get>
+type Settings = InferOutput<
+  typeof forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get
+>
 
 export interface CalculatedPayment {
   electricityBill: number

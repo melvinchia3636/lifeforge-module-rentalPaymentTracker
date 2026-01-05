@@ -10,7 +10,7 @@ const get = forgeController
   .callback(async ({ pb }) => {
     // Try to get existing settings (there should only be one)
     const existing = await pb.getFullList
-      .collection('rental_payment_tracker__settings')
+      .collection('melvinchia3636$rentalPaymentTracker__settings')
       .execute()
 
     if (existing.length > 0) {
@@ -19,7 +19,7 @@ const get = forgeController
       // If wallet module is not available, ensure link_with_wallet is false
       if (!walletModuleAvailable) {
         return await pb.update
-          .collection('rental_payment_tracker__settings')
+          .collection('melvinchia3636$rentalPaymentTracker__settings')
           .id(existing[0].id)
           .data({ link_with_wallet: false, wallet_template_id: '' })
           .execute()
@@ -30,7 +30,7 @@ const get = forgeController
 
     // Create default settings if none exist
     return await pb.create
-      .collection('rental_payment_tracker__settings')
+      .collection('melvinchia3636$rentalPaymentTracker__settings')
       .data({
         initial_prepayment: 0,
         initial_meter_reading: 0,
@@ -45,25 +45,25 @@ const update = forgeController
   .mutation()
   .description('Update user settings')
   .input({
-    body: SCHEMAS.rental_payment_tracker.settings.schema.partial()
+    body: SCHEMAS.melvinchia3636$rentalPaymentTracker.settings.schema.partial()
   })
   .callback(async ({ pb, body }) => {
     // Get existing settings
     const existing = await pb.getFullList
-      .collection('rental_payment_tracker__settings')
+      .collection('melvinchia3636$rentalPaymentTracker__settings')
       .execute()
 
     if (existing.length === 0) {
       // Create new settings
       return await pb.create
-        .collection('rental_payment_tracker__settings')
+        .collection('melvinchia3636$rentalPaymentTracker__settings')
         .data(body)
         .execute()
     }
 
     // Update existing settings
     return await pb.update
-      .collection('rental_payment_tracker__settings')
+      .collection('melvinchia3636$rentalPaymentTracker__settings')
       .id(existing[0].id)
       .data(body)
       .execute()

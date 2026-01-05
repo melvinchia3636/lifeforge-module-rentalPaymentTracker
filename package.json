@@ -1,7 +1,13 @@
 {
-  "name": "rental-payment-tracker",
-  "version": "0.0.0",
-  "description": "Nice",
+  "name": "@lifeforge/melvinchia3636--rental-payment-tracker",
+  "displayName": "Rental Payment Tracker",
+  "version": "0.0.2",
+  "description": "Track rental payments, electricity usage, and utility bills with meter reading records, with link to your wallet module.",
+  "author": "melvinchia3636 <melvinchia623600@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/melvinchia3636/lifeforge-module-rentalPaymentTracker"
+  },
   "scripts": {
     "types": "cd client && bun tsc"
   },
@@ -28,5 +34,17 @@
     "@types/react-dom": "^19.2.0",
     "@types/react-virtualized": "^9.22.3",
     "vite": "^7.1.9"
+  },
+  "exports": {
+    "./server": "./server/index.ts",
+    "./manifest": {
+      "types": "./manifest.d.ts",
+      "default": "./manifest.ts"
+    },
+    "./server/schema": "./server/schema.ts"
+  },
+  "lifeforge": {
+    "icon": "tabler:receipt",
+    "category": "Finance"
   }
 }

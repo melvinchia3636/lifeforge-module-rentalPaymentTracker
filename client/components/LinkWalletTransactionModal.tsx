@@ -1,5 +1,4 @@
 import type { PaymentEntry } from '@'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Button,
@@ -13,6 +12,8 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { AutoSizer } from 'react-virtualized'
 import { usePromiseLoading } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import TransactionListItem from './TransactionListItem'
 
@@ -50,7 +51,7 @@ function LinkWalletTransactionModal({
   )
 
   const linkTransactionMutation = useMutation(
-    forgeAPI.rentalPaymentTracker.entries.linkWalletTransaction.mutationOptions(
+    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.linkWalletTransaction.mutationOptions(
       {
         onSuccess: () => {
           toast.success('Transaction linked successfully')
@@ -106,7 +107,7 @@ function LinkWalletTransactionModal({
             icon="tabler:search"
             message={{
               id: 'linkWalletQuery',
-              namespace: 'apps.rentalPaymentTracker'
+              namespace: 'apps.melvinchia3636$rentalPaymentTracker'
             }}
           />
         </div>
@@ -119,7 +120,7 @@ function LinkWalletTransactionModal({
                   <EmptyStateScreen
                     message={{
                       id: 'noTransactionsFound',
-                      namespace: 'apps.rentalPaymentTracker'
+                      namespace: 'apps.melvinchia3636$rentalPaymentTracker'
                     }}
                   />
                 </div>

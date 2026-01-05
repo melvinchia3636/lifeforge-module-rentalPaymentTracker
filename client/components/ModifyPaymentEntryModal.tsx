@@ -9,7 +9,7 @@ import { type InferInput, getFormFileFieldInitialData } from 'shared'
 import forgeAPI from '../utils/forgeAPI'
 
 type FormData = InferInput<
-  typeof forgeAPI.rentalPaymentTracker.entries.create
+  typeof forgeAPI.melvinchia3636$rentalPaymentTracker.entries.create
 >['body']
 
 export default function ModifyPaymentEntryModal({
@@ -22,22 +22,22 @@ export default function ModifyPaymentEntryModal({
     initialData?: PaymentEntry
   }
 }) {
-  const { t } = useTranslation('apps.rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const qc = useQueryClient()
 
   const settingsQuery = useQuery(
-    forgeAPI.rentalPaymentTracker.settings.get.queryOptions()
+    forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get.queryOptions()
   )
 
   const entriesQuery = useQuery(
-    forgeAPI.rentalPaymentTracker.entries.list.queryOptions()
+    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.list.queryOptions()
   )
 
   const mutation = useMutation(
     (openType === 'create'
-      ? forgeAPI.rentalPaymentTracker.entries.create
-      : forgeAPI.rentalPaymentTracker.entries.update.input({
+      ? forgeAPI.melvinchia3636$rentalPaymentTracker.entries.create
+      : forgeAPI.melvinchia3636$rentalPaymentTracker.entries.update.input({
           id: initialData!.id!
         })
     ).mutationOptions({
@@ -74,7 +74,7 @@ export default function ModifyPaymentEntryModal({
     title: `payment.${openType}`,
     icon: 'tabler:receipt',
     onClose,
-    namespace: 'apps.rentalPaymentTracker',
+    namespace: 'apps.melvinchia3636$rentalPaymentTracker',
     submitButton: openType === 'create' ? 'create' : 'update'
   })
     .typesMap({

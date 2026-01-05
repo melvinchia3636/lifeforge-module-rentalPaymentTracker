@@ -1,9 +1,10 @@
 import type { PaymentEntry } from '@'
-import type { CalculatedPayment } from '@/utils/calculations'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Trans, useTranslation } from 'react-i18next'
 import { usePersonalization } from 'shared'
+
+import type { CalculatedPayment } from '@/utils/calculations'
 
 function BreakdownTable({
   entry,
@@ -18,7 +19,7 @@ function BreakdownTable({
   entry: PaymentEntry
   calculations: CalculatedPayment
 }) {
-  const { t } = useTranslation('apps.rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const { language } = usePersonalization()
 
@@ -87,7 +88,7 @@ function BreakdownTable({
           <td className="text-bg-500 px-4 py-3 print:text-zinc-500">
             <Trans
               i18nKey="paymentCard.lessTotalPayable"
-              ns="apps.rentalPaymentTracker"
+              ns="apps.melvinchia3636$rentalPaymentTracker"
             />
           </td>
           <td className="text-bg-800 dark:text-bg-100 border-bg-200 dark:border-bg-700 border-b-[1.5px] px-4 py-3 text-right font-medium print:border-zinc-300">

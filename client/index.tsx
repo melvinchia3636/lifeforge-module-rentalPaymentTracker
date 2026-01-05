@@ -25,31 +25,31 @@ import {
 import forgeAPI from './utils/forgeAPI'
 
 export type PaymentEntry = InferOutput<
-  typeof forgeAPI.rentalPaymentTracker.entries.getById
+  typeof forgeAPI.melvinchia3636$rentalPaymentTracker.entries.getById
 >
 
 function RentalPaymentTracker() {
-  const { t } = useTranslation('apps.rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const open = useModalStore(state => state.open)
 
   const [ready, setReady] = useState(false)
 
   const entriesQuery = useQuery(
-    forgeAPI.rentalPaymentTracker.entries.list.queryOptions({
+    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.list.queryOptions({
       enabled: ready
     })
   )
 
   const settingsQuery = useQuery(
-    forgeAPI.rentalPaymentTracker.settings.get.queryOptions()
+    forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get.queryOptions()
   )
 
   // Clean up orphaned wallet links on mount
   useEffect(() => {
     const cleanup = async () => {
       try {
-        await forgeAPI.rentalPaymentTracker.entries.cleanupOrphanedWalletLinks.mutate(
+        await forgeAPI.melvinchia3636$rentalPaymentTracker.entries.cleanupOrphanedWalletLinks.mutate(
           {}
         )
       } catch (error) {
@@ -144,7 +144,7 @@ function RentalPaymentTracker() {
               <ContextMenuItem
                 icon="tabler:settings"
                 label="settings"
-                namespace="apps.rentalPaymentTracker"
+                namespace="apps.melvinchia3636$rentalPaymentTracker"
                 onClick={() => {
                   open(SettingsModal, {})
                 }}
@@ -160,7 +160,7 @@ function RentalPaymentTracker() {
               icon="tabler:receipt-off"
               message={{
                 id: 'payment',
-                namespace: 'apps.rentalPaymentTracker'
+                namespace: 'apps.melvinchia3636$rentalPaymentTracker'
               }}
             />
           ) : (
@@ -180,7 +180,7 @@ function RentalPaymentTracker() {
                 }
                 className="mb-6 h-min"
                 icon="tabler:cash-plus"
-                namespace="apps.rentalPaymentTracker"
+                namespace="apps.melvinchia3636$rentalPaymentTracker"
                 title="Prepaid Amount"
               >
                 <Amount

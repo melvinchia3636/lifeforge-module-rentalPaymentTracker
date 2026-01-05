@@ -15,7 +15,7 @@ interface PaymentCardProps {
 }
 
 export default function PaymentCard({ entry, calculations }: PaymentCardProps) {
-  const { t } = useTranslation('apps.rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const ref = useRef<HTMLDivElement>(null)
 

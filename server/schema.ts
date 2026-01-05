@@ -1,6 +1,6 @@
 import z from 'zod'
 
-const rentalPaymentTrackerSchemas = {
+const schemas = {
   entries: {
     schema: z.object({
       month: z.number(),
@@ -24,7 +24,7 @@ const rentalPaymentTrackerSchemas = {
       createRule: '@request.auth.id != ""',
       updateRule: '@request.auth.id != ""',
       deleteRule: '@request.auth.id != ""',
-      name: 'rental_payment_tracker__entries',
+      name: 'melvinchia3636___rental_payment_tracker__entries',
       type: 'base',
       fields: [
         {
@@ -229,7 +229,7 @@ const rentalPaymentTrackerSchemas = {
       createRule: '@request.auth.id != ""',
       updateRule: '@request.auth.id != ""',
       deleteRule: '@request.auth.id != ""',
-      name: 'rental_payment_tracker__settings',
+      name: 'melvinchia3636___rental_payment_tracker__settings',
       type: 'base',
       fields: [
         {
@@ -328,4 +328,4 @@ const rentalPaymentTrackerSchemas = {
   }
 }
 
-export default rentalPaymentTrackerSchemas
+export default schemas
