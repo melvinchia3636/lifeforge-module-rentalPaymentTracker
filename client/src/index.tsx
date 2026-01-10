@@ -18,6 +18,7 @@ import Amount from './components/Amount'
 import ModifyPaymentEntryModal from './components/ModifyPaymentEntryModal'
 import PaymentCard from './components/PaymentCard'
 import SettingsModal from './components/SettingsModal'
+import './index.css'
 import {
   type CalculatedPayment,
   calculateAllPrepayments
@@ -31,7 +32,7 @@ export type PaymentEntry = InferOutput<
 function RentalPaymentTracker() {
   const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const [ready, setReady] = useState(false)
 

@@ -32,7 +32,7 @@ function Header({
 }) {
   const queryClient = useQueryClient()
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const { language } = usePersonalization()
 

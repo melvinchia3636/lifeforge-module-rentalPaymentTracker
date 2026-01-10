@@ -32,7 +32,7 @@ function DetailsSection({
 
   const { height } = useDivSize(thisRef)
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
