@@ -1,7 +1,7 @@
 {
   "name": "@lifeforge/melvinchia3636--rental-payment-tracker",
   "displayName": "Rental Payment Tracker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Track rental payments, electricity usage, and utility bills with meter reading records, with link to your wallet module.",
   "author": "melvinchia3636 <melvinchia623600@gmail.com>",
   "repository": {
