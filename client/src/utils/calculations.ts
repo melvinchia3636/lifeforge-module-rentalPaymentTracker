@@ -3,9 +3,7 @@ import type { InferOutput } from 'shared'
 import type { PaymentEntry } from '../index'
 import forgeAPI from './forgeAPI'
 
-type Settings = InferOutput<
-  typeof forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get
->
+type Settings = InferOutput<typeof forgeAPI.settings.get>
 
 export interface CalculatedPayment {
   electricityBill: number

@@ -11,13 +11,11 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
 
   const qc = useQueryClient()
 
-  const settingsQuery = useQuery(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get.queryOptions()
-  )
+  const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
 
   const walletAvailabilityQuery = useQuery(
-    forgeAPI.modules.checkModuleAvailability
-      .input({
+    forgeAPI
+      .checkModuleAvailability({
         moduleId: 'wallet'
       })
       .queryOptions()
@@ -50,16 +48,14 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
   )
 
   const mutation = useMutation(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.settings.update.mutationOptions(
-      {
-        onSuccess: () => {
-          qc.invalidateQueries({
-            queryKey: ['rentalPaymentTracker', 'settings']
-          })
-          onClose()
-        }
+    forgeAPI.settings.update.mutationOptions({
+      onSuccess: () => {
+        qc.invalidateQueries({
+          queryKey: ['rentalPaymentTracker', 'settings']
+        })
+        onClose()
       }
-    )
+    })
   )
 
   console.log('walletTemplatesQuery.data', walletTemplatesQuery.data)
@@ -69,9 +65,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
   }
 
   const { formProps } = defineForm<
-    InferInput<
-      typeof forgeAPI.melvinchia3636$rentalPaymentTracker.settings.update
-    >['body']
+    InferInput<typeof forgeAPI.settings.update>['body']
   >({
     title: 'Settings',
     icon: 'tabler:settings',

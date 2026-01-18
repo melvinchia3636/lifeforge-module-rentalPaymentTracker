@@ -51,29 +51,25 @@ function LinkWalletTransactionModal({
   )
 
   const linkTransactionMutation = useMutation(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.linkWalletTransaction.mutationOptions(
-      {
-        onSuccess: () => {
-          toast.success('Transaction linked successfully')
-          queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
-          queryClient.invalidateQueries({ queryKey: ['wallet'] })
-          onClose()
-        },
-        onError: (error: Error) => {
-          const errorMessage = error?.message || 'Failed to link transaction'
+    forgeAPI.entries.linkWalletTransaction.mutationOptions({
+      onSuccess: () => {
+        toast.success('Transaction linked successfully')
+        queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
+        queryClient.invalidateQueries({ queryKey: ['wallet'] })
+        onClose()
+      },
+      onError: (error: Error) => {
+        const errorMessage = error?.message || 'Failed to link transaction'
 
-          if (
-            errorMessage.includes('already linked to another payment entry')
-          ) {
-            toast.error(
-              'This wallet transaction is already linked to another payment entry'
-            )
-          } else {
-            toast.error(errorMessage)
-          }
+        if (errorMessage.includes('already linked to another payment entry')) {
+          toast.error(
+            'This wallet transaction is already linked to another payment entry'
+          )
+        } else {
+          toast.error(errorMessage)
         }
       }
-    )
+    })
   )
 
   async function handleLinkTransaction() {

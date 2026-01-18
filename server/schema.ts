@@ -1,6 +1,7 @@
+import { cleanSchemas } from '@lifeforge/server-utils'
 import z from 'zod'
 
-const schemas = {
+export const schemas = {
   entries: {
     schema: z.object({
       month: z.number(),
@@ -328,4 +329,4 @@ const schemas = {
   }
 }
 
-export default schemas
+export default cleanSchemas(schemas)

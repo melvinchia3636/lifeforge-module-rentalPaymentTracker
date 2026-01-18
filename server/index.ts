@@ -1,9 +1,11 @@
-import { forgeRouter } from '@functions/routes'
+import { forgeRouter } from '@lifeforge/server-utils'
 
 import * as entriesRoutes from './routes/entries'
-import settingsRoutes from './routes/settings'
+import * as settingsRoutes from './routes/settings'
 
-export default forgeRouter({
+const nice = forgeRouter({
   entries: entriesRoutes,
   settings: settingsRoutes
 })
+
+export default nice

@@ -8,9 +8,7 @@ import { type InferInput, getFormFileFieldInitialData } from 'shared'
 
 import forgeAPI from '../utils/forgeAPI'
 
-type FormData = InferInput<
-  typeof forgeAPI.melvinchia3636$rentalPaymentTracker.entries.create
->['body']
+type FormData = InferInput<typeof forgeAPI.entries.create>['body']
 
 export default function ModifyPaymentEntryModal({
   onClose,
@@ -26,18 +24,14 @@ export default function ModifyPaymentEntryModal({
 
   const qc = useQueryClient()
 
-  const settingsQuery = useQuery(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get.queryOptions()
-  )
+  const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
 
-  const entriesQuery = useQuery(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.list.queryOptions()
-  )
+  const entriesQuery = useQuery(forgeAPI.entries.list.queryOptions())
 
   const mutation = useMutation(
     (openType === 'create'
-      ? forgeAPI.melvinchia3636$rentalPaymentTracker.entries.create
-      : forgeAPI.melvinchia3636$rentalPaymentTracker.entries.update.input({
+      ? forgeAPI.entries.create
+      : forgeAPI.entries.update.input({
           id: initialData!.id!
         })
     ).mutationOptions({

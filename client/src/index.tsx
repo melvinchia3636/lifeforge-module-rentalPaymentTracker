@@ -25,9 +25,7 @@ import {
 } from './utils/calculations'
 import forgeAPI from './utils/forgeAPI'
 
-export type PaymentEntry = InferOutput<
-  typeof forgeAPI.melvinchia3636$rentalPaymentTracker.entries.getById
->
+export type PaymentEntry = InferOutput<typeof forgeAPI.entries.getById>
 
 function RentalPaymentTracker() {
   const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
@@ -37,22 +35,18 @@ function RentalPaymentTracker() {
   const [ready, setReady] = useState(false)
 
   const entriesQuery = useQuery(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.list.queryOptions({
+    forgeAPI.entries.list.queryOptions({
       enabled: ready
     })
   )
 
-  const settingsQuery = useQuery(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.settings.get.queryOptions()
-  )
+  const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
 
   // Clean up orphaned wallet links on mount
   useEffect(() => {
     const cleanup = async () => {
       try {
-        await forgeAPI.melvinchia3636$rentalPaymentTracker.entries.cleanupOrphanedWalletLinks.mutate(
-          {}
-        )
+        await forgeAPI.entries.cleanupOrphanedWalletLinks.mutate({})
       } catch (error) {
         // Silent fail - this is a background cleanup task
         console.debug('Wallet link cleanup completed or skipped', error)

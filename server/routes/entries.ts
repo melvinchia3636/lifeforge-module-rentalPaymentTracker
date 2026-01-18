@@ -1,25 +1,20 @@
-import { SCHEMAS } from '@schema'
+import { ClientError } from '@lifeforge/server-utils'
+import dayjs from 'dayjs'
 import fs from 'fs'
-import moment from 'moment'
 import z from 'zod'
 
-import { forgeController } from '@functions/routes'
-import { ClientError } from '@functions/routes/utils/response'
-import { checkModulesAvailability } from '@functions/utils/checkModulesAvailability'
-import convertPDFToImage from '@functions/utils/convertPDFToImage'
+import forge from '../forge'
+import schemas from '../schema'
 
-export const list = forgeController
+export const list = forge
   .query()
   .description('List all payment entries')
   .input({})
   .callback(async ({ pb }) =>
-    pb.getFullList
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
-      .sort(['-year', '-month'])
-      .execute()
+    pb.getFullList.collection('entries').sort(['-year', '-month']).execute()
   )
 
-export const getById = forgeController
+export const getById = forge
   .query()
   .description('Get entry by ID')
   .input({
@@ -28,20 +23,17 @@ export const getById = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'melvinchia3636$rentalPaymentTracker__entries'
+    id: 'entries'
   })
   .callback(({ pb, query: { id } }) =>
-    pb.getOne
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
-      .id(id)
-      .execute()
+    pb.getOne.collection('entries').id(id).execute()
   )
 
-export const create = forgeController
+export const create = forge
   .mutation()
   .description('Create a new payment entry')
   .input({
-    body: SCHEMAS.melvinchia3636$rentalPaymentTracker.entries.schema
+    body: schemas.entries
       .omit({
         created: true,
         updated: true,
@@ -65,7 +57,11 @@ export const create = forgeController
     async ({
       pb,
       body,
-      media: { meter_reading_image: rawMeter, bank_statement: rawStatement }
+      media: { meter_reading_image: rawMeter, bank_statement: rawStatement },
+      core: {
+        media: { convertPDFToImage },
+        validation: { checkModulesAvailability }
+      }
     }) => {
       // Handle meter reading image
       const meterReadingImage =
@@ -86,7 +82,7 @@ export const create = forgeController
           : undefined
 
       const baseEntry = await pb.create
-        .collection('melvinchia3636$rentalPaymentTracker__entries')
+        .collection('entries')
         .data({
           ...body,
           meter_reading_image: meterReadingImage,
@@ -94,9 +90,7 @@ export const create = forgeController
         })
         .execute()
 
-      const settings = await pb.getFullList
-        .collection('melvinchia3636$rentalPaymentTracker__settings')
-        .execute()
+      const settings = await pb.getFullList.collection('settings').execute()
 
       if (!settings.length) {
         throw new Error('Settings not found')
@@ -116,7 +110,7 @@ export const create = forgeController
       }
 
       const walletTemplate = await pb.instance
-        .collection('wallet__transaction_templates')
+        .collection('transaction_templates')
         .getOne(settingsData.wallet_template_id)
         .catch(() => null)
 
@@ -127,7 +121,7 @@ export const create = forgeController
       const baseTransactionEntry = await pb.instance
         .collection('wallet__transactions')
         .create({
-          date: moment()
+          date: dayjs()
             .year(body.year)
             .month(body.month - 1)
             .date(1)
@@ -136,23 +130,21 @@ export const create = forgeController
           type: 'income_expenses'
         })
 
-      await pb.instance
-        .collection('wallet__transactions_income_expenses')
-        .create({
-          base_transaction: baseTransactionEntry.id,
-          type: 'expenses',
-          particulars: `Rental Payment - ${moment()
-            .month(body.month - 1)
-            .format('MMMM')} ${body.year}`,
-          asset: walletTemplate.asset,
-          category: walletTemplate.category,
-          ledgers: walletTemplate.ledgers,
-          location_coords: walletTemplate.location_coords,
-          location_name: walletTemplate.location_name
-        })
+      await pb.instance.collection('transactions_income_expenses').create({
+        base_transaction: baseTransactionEntry.id,
+        type: 'expenses',
+        particulars: `Rental Payment - ${dayjs()
+          .month(body.month - 1)
+          .format('MMMM')} ${body.year}`,
+        asset: walletTemplate.asset,
+        category: walletTemplate.category,
+        ledgers: walletTemplate.ledgers,
+        location_coords: walletTemplate.location_coords,
+        location_name: walletTemplate.location_name
+      })
 
       await pb.update
-        .collection('melvinchia3636$rentalPaymentTracker__entries')
+        .collection('entries')
         .id(baseEntry.id)
         .data({
           wallet_entry_id: baseTransactionEntry.id,
@@ -164,21 +156,19 @@ export const create = forgeController
     }
   )
 
-export const update = forgeController
+export const update = forge
   .mutation()
   .description('Update an existing entry')
   .input({
     query: z.object({
       id: z.string()
     }),
-    body: SCHEMAS.melvinchia3636$rentalPaymentTracker.entries.schema
-      .partial()
-      .omit({
-        created: true,
-        updated: true,
-        meter_reading_image: true,
-        bank_statement: true
-      })
+    body: schemas.entries.partial().omit({
+      created: true,
+      updated: true,
+      meter_reading_image: true,
+      bank_statement: true
+    })
   })
   .media({
     meter_reading_image: {
@@ -189,18 +179,21 @@ export const update = forgeController
     }
   })
   .existenceCheck('query', {
-    id: 'melvinchia3636$rentalPaymentTracker__entries'
+    id: 'entries'
   })
   .callback(
     async ({
       pb,
       query: { id },
       body,
-      media: { meter_reading_image: rawMeter, bank_statement: rawStatement }
+      media: { meter_reading_image: rawMeter, bank_statement: rawStatement },
+      core: {
+        media: { convertPDFToImage }
+      }
     }) => {
       // Get the current entry to check if it has a linked wallet transaction
       const currentEntry = await pb.getOne
-        .collection('melvinchia3636$rentalPaymentTracker__entries')
+        .collection('entries')
         .id(id)
         .execute()
 
@@ -223,7 +216,7 @@ export const update = forgeController
           : undefined
 
       const updatedEntry = await pb.update
-        .collection('melvinchia3636$rentalPaymentTracker__entries')
+        .collection('entries')
         .id(id)
         .data({
           ...body,
@@ -250,7 +243,7 @@ export const update = forgeController
             await pb.instance
               .collection('wallet__transactions')
               .update(currentEntry.wallet_entry_id, {
-                date: moment()
+                date: dayjs()
                   .year(newYear)
                   .month(newMonth - 1)
                   .date(1)
@@ -268,7 +261,7 @@ export const update = forgeController
               await pb.instance
                 .collection('wallet__transactions_income_expenses')
                 .update(incomeExpense.id, {
-                  particulars: `Rental Payment - ${moment()
+                  particulars: `Rental Payment - ${dayjs()
                     .month(newMonth - 1)
                     .format('MMMM')} ${newYear}`
                 })
@@ -283,7 +276,7 @@ export const update = forgeController
     }
   )
 
-export const linkWalletTransaction = forgeController
+export const linkWalletTransaction = forge
   .mutation()
   .description('Link a wallet transaction to a rental payment entry')
   .input({
@@ -293,13 +286,13 @@ export const linkWalletTransaction = forgeController
     })
   })
   .existenceCheck('body', {
-    entryId: 'melvinchia3636$rentalPaymentTracker__entries',
+    entryId: 'entries',
     transactionId: 'wallet__transactions' as any
   })
   .callback(async ({ pb, body: { entryId, transactionId } }) => {
     // Check if this wallet transaction is already linked to another entry
     const existingEntries = await pb.getFullList
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
+      .collection('entries')
       .filter([
         {
           field: 'wallet_entry_id',
@@ -323,7 +316,7 @@ export const linkWalletTransaction = forgeController
     // When linking a wallet transaction, the wallet entry becomes the source of truth
     // Set amount_paid to 0 as we'll use the wallet transaction amount directly
     return await pb.update
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
+      .collection('entries')
       .id(entryId)
       .data({
         wallet_entry_id: transactionId,
@@ -332,7 +325,7 @@ export const linkWalletTransaction = forgeController
       .execute()
   })
 
-export const unlinkWalletTransaction = forgeController
+export const unlinkWalletTransaction = forge
   .mutation()
   .description('Unlink a wallet transaction from a rental payment entry')
   .input({
@@ -341,14 +334,11 @@ export const unlinkWalletTransaction = forgeController
     })
   })
   .existenceCheck('body', {
-    entryId: 'melvinchia3636$rentalPaymentTracker__entries'
+    entryId: 'entries'
   })
   .callback(async ({ pb, body: { entryId } }) => {
     // Get the current entry to find the linked wallet transaction
-    const entry = await pb.getOne
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
-      .id(entryId)
-      .execute()
+    const entry = await pb.getOne.collection('entries').id(entryId).execute()
 
     if (!entry.wallet_entry_id) {
       throw new Error('No wallet transaction linked to this entry')
@@ -364,7 +354,7 @@ export const unlinkWalletTransaction = forgeController
 
     // Unlink by clearing wallet_entry_id and restoring the amount
     return await pb.update
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
+      .collection('entries')
       .id(entryId)
       .data({
         wallet_entry_id: '',
@@ -373,55 +363,62 @@ export const unlinkWalletTransaction = forgeController
       .execute()
   })
 
-export const cleanupOrphanedWalletLinks = forgeController
+export const cleanupOrphanedWalletLinks = forge
   .mutation()
   .description(
     'Clean up rental payment entries that are linked to deleted wallet transactions'
   )
   .input({})
-  .callback(async ({ pb }) => {
-    const walletModuleAvailable = checkModulesAvailability('wallet')
+  .callback(
+    async ({
+      pb,
+      core: {
+        validation: { checkModulesAvailability }
+      }
+    }) => {
+      const walletModuleAvailable = checkModulesAvailability('wallet')
 
-    if (!walletModuleAvailable) {
-      return { cleanedCount: 0, entries: [] }
-    }
+      if (!walletModuleAvailable) {
+        return { cleanedCount: 0, entries: [] }
+      }
 
-    // Get all entries that have a wallet_entry_id
-    const entriesWithWallet = await pb.getFullList
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
-      .filter([{ field: 'wallet_entry_id', operator: '!=', value: '' }])
-      .execute()
+      // Get all entries that have a wallet_entry_id
+      const entriesWithWallet = await pb.getFullList
+        .collection('entries')
+        .filter([{ field: 'wallet_entry_id', operator: '!=', value: '' }])
+        .execute()
 
-    const cleanedEntries: string[] = []
+      const cleanedEntries: string[] = []
 
-    // Check each linked wallet transaction
-    for (const entry of entriesWithWallet) {
-      try {
-        // Try to fetch the wallet transaction
-        await pb.instance
-          .collection('wallet__transactions')
-          .getOne(entry.wallet_entry_id)
-      } catch {
-        // If wallet transaction doesn't exist, clear the link
-        await pb.update
-          .collection('melvinchia3636$rentalPaymentTracker__entries')
-          .id(entry.id)
-          .data({
-            wallet_entry_id: ''
-          })
-          .execute()
+      // Check each linked wallet transaction
+      for (const entry of entriesWithWallet) {
+        try {
+          // Try to fetch the wallet transaction
+          await pb.instance
+            .collection('wallet__transactions')
+            .getOne(entry.wallet_entry_id)
+        } catch {
+          // If wallet transaction doesn't exist, clear the link
+          await pb.update
+            .collection('entries')
+            .id(entry.id)
+            .data({
+              wallet_entry_id: ''
+            })
+            .execute()
 
-        cleanedEntries.push(entry.id)
+          cleanedEntries.push(entry.id)
+        }
+      }
+
+      return {
+        cleanedCount: cleanedEntries.length,
+        entries: cleanedEntries
       }
     }
+  )
 
-    return {
-      cleanedCount: cleanedEntries.length,
-      entries: cleanedEntries
-    }
-  })
-
-export const remove = forgeController
+export const remove = forge
   .mutation()
   .description('Delete an entry')
   .input({
@@ -430,12 +427,9 @@ export const remove = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'melvinchia3636$rentalPaymentTracker__entries'
+    id: 'entries'
   })
   .statusCode(204)
   .callback(({ pb, query: { id } }) =>
-    pb.delete
-      .collection('melvinchia3636$rentalPaymentTracker__entries')
-      .id(id)
-      .execute()
+    pb.delete.collection('entries').id(id).execute()
   )

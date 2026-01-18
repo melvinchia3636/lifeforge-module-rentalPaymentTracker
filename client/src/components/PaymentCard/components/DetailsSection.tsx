@@ -37,16 +37,16 @@ function DetailsSection({
   const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
 
   const fontQuery = useQuery(
-    forgeAPI.user.personalization.getGoogleFont
-      .input({
+    forgeAPI
+      .getGoogleFont({
         family: 'Onest'
       })
       .queryOptions()
   )
 
   const walletAvailabilityQuery = useQuery(
-    forgeAPI.modules.checkModuleAvailability
-      .input({
+    forgeAPI
+      .checkModuleAvailability({
         moduleId: 'wallet'
       })
       .queryOptions()
@@ -64,11 +64,11 @@ function DetailsSection({
 
   const reactToPrintFn = useReactToPrint({
     contentRef: ref,
-    fonts: fontQuery.data?.items.length
+    fonts: fontQuery.data?.items?.length
       ? [
           {
             family: fontQuery.data.items[0].family,
-            source: fontQuery.data.items[0].files.regular
+            source: fontQuery.data.items[0].files.regular || ''
           }
         ]
       : [],
@@ -115,11 +115,11 @@ function DetailsSection({
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
-                      forgeAPI.media.input({
+                      forgeAPI.getMedia({
                         collectionId: entry.collectionId,
                         fieldId: entry.meter_reading_image,
                         recordId: entry.id
-                      }).endpoint
+                      })
                     )
                   }
                 >
@@ -134,11 +134,11 @@ function DetailsSection({
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
-                      forgeAPI.media.input({
+                      forgeAPI.getMedia({
                         collectionId: entry.collectionId,
                         fieldId: entry.bank_statement,
                         recordId: entry.id
-                      }).endpoint
+                      })
                     )
                   }
                 >

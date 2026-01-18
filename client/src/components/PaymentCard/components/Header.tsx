@@ -43,15 +43,15 @@ function Header({
   const isExcessPayment = amountPaid >= totalPayable
 
   const walletAvailabilityQuery = useQuery(
-    forgeAPI.modules.checkModuleAvailability
-      .input({
+    forgeAPI
+      .checkModuleAvailability({
         moduleId: 'wallet'
       })
       .queryOptions()
   )
 
   const removeEntryMutation = useMutation(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.remove
+    forgeAPI.entries.remove
       .input({
         id: entry.id
       })
@@ -66,18 +66,16 @@ function Header({
   )
 
   const unlinkWalletMutation = useMutation(
-    forgeAPI.melvinchia3636$rentalPaymentTracker.entries.unlinkWalletTransaction.mutationOptions(
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
-          queryClient.invalidateQueries({ queryKey: ['wallet'] })
-          toast.success('Wallet transaction unlinked successfully')
-        },
-        onError: () => {
-          toast.error('Failed to unlink wallet transaction')
-        }
+    forgeAPI.entries.unlinkWalletTransaction.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
+        queryClient.invalidateQueries({ queryKey: ['wallet'] })
+        toast.success('Wallet transaction unlinked successfully')
+      },
+      onError: () => {
+        toast.error('Failed to unlink wallet transaction')
       }
-    )
+    })
   )
 
   function handleDelete() {
