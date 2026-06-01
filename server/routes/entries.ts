@@ -1,4 +1,3 @@
-import { ClientError } from '@lifeforge/server-utils'
 import dayjs from 'dayjs'
 import fs from 'fs'
 import z from 'zod'
@@ -7,52 +6,68 @@ import forge from '../forge'
 import schemas from '../schema'
 
 export const list = forge
-  .query()
-  .description('List all payment entries')
-  .input({})
-  .callback(async ({ pb }) =>
-    pb.getFullList.collection('entries').sort(['-year', '-month']).execute()
+  .query({
+    description: 'List all payment entries',
+    output: {
+      OK: z.array(schemas.entries)
+    }
+  })
+  .callback(async ({ pb, response }) =>
+    response.ok(
+      await pb.getFullList
+        .collection('entries')
+        .sort(['-year', '-month'])
+        .execute()
+    )
   )
 
 export const getById = forge
-  .query()
-  .description('Get entry by ID')
-  .input({
-    query: z.object({
-      id: z.string()
-    })
+  .query({
+    description: 'Get entry by ID',
+    input: {
+      query: z.object({
+        id: z.string()
+      })
+    },
+    existenceCheck: {
+      query: { id: 'entries' }
+    },
+    output: {
+      OK: schemas.entries,
+      NOT_FOUND: true
+    }
   })
-  .existenceCheck('query', {
-    id: 'entries'
-  })
-  .callback(({ pb, query: { id } }) =>
-    pb.getOne.collection('entries').id(id).execute()
+  .callback(async ({ pb, query: { id }, response }) =>
+    response.ok(await pb.getOne.collection('entries').id(id).execute())
   )
 
 export const create = forge
-  .mutation()
-  .description('Create a new payment entry')
-  .input({
-    body: schemas.entries
-      .omit({
-        created: true,
-        updated: true,
-        meter_reading_image: true,
-        bank_statement: true
-      })
-      .extend({
-        auto_create_wallet_transaction: z.boolean().optional()
-      })
-  })
-  .media({
-    meter_reading_image: {
-      optional: true
+  .mutation({
+    description: 'Create a new payment entry',
+    input: {
+      body: schemas.entries
+        .omit({
+          created: true,
+          updated: true,
+          meter_reading_image: true,
+          bank_statement: true
+        })
+        .extend({
+          auto_create_wallet_transaction: z.boolean().optional()
+        })
     },
-    bank_statement: {
-      optional: true
+    media: {
+      meter_reading_image: {
+        optional: true
+      },
+      bank_statement: {
+        optional: true
+      }
+    },
+    output: {
+      CREATED: schemas.entries
     }
   })
-  .statusCode(201)
   .callback(
     async ({
       pb,
@@ -61,9 +76,9 @@ export const create = forge
       core: {
         media: { convertPDFToImage },
         validation: { checkModulesAvailability }
-      }
+      },
+      response
     }) => {
-      // Handle meter reading image
       const meterReadingImage =
         rawMeter && typeof rawMeter !== 'string'
           ? new File([fs.readFileSync(rawMeter.path)], 'meter.jpg', {
@@ -71,7 +86,6 @@ export const create = forge
             })
           : undefined
 
-      // Handle bank statement (convert PDF if needed)
       const bankStatement =
         rawStatement && typeof rawStatement !== 'string'
           ? rawStatement.originalname.endsWith('.pdf')
@@ -93,7 +107,7 @@ export const create = forge
       const settings = await pb.getFullList.collection('settings').execute()
 
       if (!settings.length) {
-        throw new Error('Settings not found')
+        return response.created(baseEntry)
       }
 
       const settingsData = settings[0]
@@ -106,7 +120,7 @@ export const create = forge
         !settingsData.wallet_template_id ||
         !walletModuleAvailable
       ) {
-        return baseEntry
+        return response.created(baseEntry)
       }
 
       const walletTemplate = await pb.instance
@@ -115,7 +129,7 @@ export const create = forge
         .catch(() => null)
 
       if (!walletTemplate) {
-        return baseEntry
+        return response.created(baseEntry)
       }
 
       const baseTransactionEntry = await pb.instance
@@ -152,34 +166,39 @@ export const create = forge
         })
         .execute()
 
-      return baseEntry
+      return response.created(baseEntry)
     }
   )
 
 export const update = forge
-  .mutation()
-  .description('Update an existing entry')
-  .input({
-    query: z.object({
-      id: z.string()
-    }),
-    body: schemas.entries.partial().omit({
-      created: true,
-      updated: true,
-      meter_reading_image: true,
-      bank_statement: true
-    })
-  })
-  .media({
-    meter_reading_image: {
-      optional: true
+  .mutation({
+    description: 'Update an existing entry',
+    input: {
+      query: z.object({
+        id: z.string()
+      }),
+      body: schemas.entries.partial().omit({
+        created: true,
+        updated: true,
+        meter_reading_image: true,
+        bank_statement: true
+      })
     },
-    bank_statement: {
-      optional: true
+    media: {
+      meter_reading_image: {
+        optional: true
+      },
+      bank_statement: {
+        optional: true
+      }
+    },
+    existenceCheck: {
+      query: { id: 'entries' }
+    },
+    output: {
+      OK: schemas.entries,
+      NOT_FOUND: true
     }
-  })
-  .existenceCheck('query', {
-    id: 'entries'
   })
   .callback(
     async ({
@@ -189,15 +208,14 @@ export const update = forge
       media: { meter_reading_image: rawMeter, bank_statement: rawStatement },
       core: {
         media: { convertPDFToImage }
-      }
+      },
+      response
     }) => {
-      // Get the current entry to check if it has a linked wallet transaction
       const currentEntry = await pb.getOne
         .collection('entries')
         .id(id)
         .execute()
 
-      // Handle meter reading image
       const meterReadingImage =
         rawMeter && typeof rawMeter !== 'string'
           ? new File([fs.readFileSync(rawMeter.path)], 'meter.jpg', {
@@ -205,7 +223,6 @@ export const update = forge
             })
           : undefined
 
-      // Handle bank statement (convert PDF if needed)
       const bankStatement =
         rawStatement && typeof rawStatement !== 'string'
           ? rawStatement.originalname.endsWith('.pdf')
@@ -230,16 +247,13 @@ export const update = forge
         })
         .execute()
 
-      // If wallet transaction is linked and year/month changed, update the wallet transaction
       if (currentEntry.wallet_entry_id && (body.year || body.month)) {
         const newYear = body.year ?? currentEntry.year
 
         const newMonth = body.month ?? currentEntry.month
 
-        // Check if year or month actually changed
         if (newYear !== currentEntry.year || newMonth !== currentEntry.month) {
           try {
-            // Update wallet transaction date
             await pb.instance
               .collection('wallet__transactions')
               .update(currentEntry.wallet_entry_id, {
@@ -250,7 +264,6 @@ export const update = forge
                   .toDate()
               })
 
-            // Update wallet transaction particulars
             const incomeExpense = await pb.instance
               .collection('wallet__transactions_income_expenses')
               .getFirstListItem(
@@ -266,31 +279,45 @@ export const update = forge
                     .format('MMMM')} ${newYear}`
                 })
             }
-          } catch {
-            // If wallet transaction doesn't exist or update fails, ignore the error
-          }
+          } catch {}
         }
       }
 
-      return updatedEntry
+      return response.ok(updatedEntry)
     }
   )
 
 export const linkWalletTransaction = forge
-  .mutation()
-  .description('Link a wallet transaction to a rental payment entry')
-  .input({
-    body: z.object({
-      entryId: z.string(),
-      transactionId: z.string()
-    })
+  .mutation({
+    description: 'Link a wallet transaction to a rental payment entry',
+    input: {
+      body: z.object({
+        entryId: z.string(),
+        transactionId: z.string()
+      })
+    },
+    existenceCheck: {
+      body: {
+        entryId: 'entries'
+      }
+    },
+    output: {
+      OK: schemas.entries,
+      CONFLICT: true,
+      BAD_REQUEST: z.string(),
+      NOT_FOUND: true
+    }
   })
-  .existenceCheck('body', {
-    entryId: 'entries',
-    transactionId: 'wallet__transactions' as any
-  })
-  .callback(async ({ pb, body: { entryId, transactionId } }) => {
-    // Check if this wallet transaction is already linked to another entry
+  .callback(async ({ pb, body: { entryId, transactionId }, response }) => {
+    const walletTransaction = await pb.instance
+      .collection('wallet__transactions')
+      .getOne(transactionId)
+      .catch(() => null)
+
+    if (!walletTransaction) {
+      return response.badRequest('Wallet transaction not found')
+    }
+
     const existingEntries = await pb.getFullList
       .collection('entries')
       .filter([
@@ -308,43 +335,45 @@ export const linkWalletTransaction = forge
       .execute()
 
     if (existingEntries.length > 0) {
-      throw new ClientError(
-        'This wallet transaction is already linked to another payment entry'
-      )
+      return response.conflict()
     }
 
-    // When linking a wallet transaction, the wallet entry becomes the source of truth
-    // Set amount_paid to 0 as we'll use the wallet transaction amount directly
-    return await pb.update
-      .collection('entries')
-      .id(entryId)
-      .data({
-        wallet_entry_id: transactionId,
-        amount_paid: 0
-      })
-      .execute()
+    return response.ok(
+      await pb.update
+        .collection('entries')
+        .id(entryId)
+        .data({
+          wallet_entry_id: transactionId,
+          amount_paid: 0
+        })
+        .execute()
+    )
   })
 
 export const unlinkWalletTransaction = forge
-  .mutation()
-  .description('Unlink a wallet transaction from a rental payment entry')
-  .input({
-    body: z.object({
-      entryId: z.string()
-    })
+  .mutation({
+    description: 'Unlink a wallet transaction from a rental payment entry',
+    input: {
+      body: z.object({
+        entryId: z.string()
+      })
+    },
+    existenceCheck: {
+      body: { entryId: 'entries' }
+    },
+    output: {
+      OK: schemas.entries,
+      BAD_REQUEST: z.string(),
+      NOT_FOUND: true
+    }
   })
-  .existenceCheck('body', {
-    entryId: 'entries'
-  })
-  .callback(async ({ pb, body: { entryId } }) => {
-    // Get the current entry to find the linked wallet transaction
+  .callback(async ({ pb, body: { entryId }, response }) => {
     const entry = await pb.getOne.collection('entries').id(entryId).execute()
 
     if (!entry.wallet_entry_id) {
-      throw new Error('No wallet transaction linked to this entry')
+      return response.badRequest('No wallet transaction linked to this entry')
     }
 
-    // Get the wallet transaction amount to restore it to the entry
     const walletTransaction = await pb.instance
       .collection('wallet__transactions')
       .getOne(entry.wallet_entry_id)
@@ -352,37 +381,43 @@ export const unlinkWalletTransaction = forge
 
     const amountToRestore = walletTransaction?.amount ?? 0
 
-    // Unlink by clearing wallet_entry_id and restoring the amount
-    return await pb.update
-      .collection('entries')
-      .id(entryId)
-      .data({
-        wallet_entry_id: '',
-        amount_paid: amountToRestore
-      })
-      .execute()
+    return response.ok(
+      await pb.update
+        .collection('entries')
+        .id(entryId)
+        .data({
+          wallet_entry_id: '',
+          amount_paid: amountToRestore
+        })
+        .execute()
+    )
   })
 
 export const cleanupOrphanedWalletLinks = forge
-  .mutation()
-  .description(
-    'Clean up rental payment entries that are linked to deleted wallet transactions'
-  )
-  .input({})
+  .mutation({
+    description:
+      'Clean up rental payment entries that are linked to deleted wallet transactions',
+    output: {
+      OK: z.object({
+        cleanedCount: z.number(),
+        entries: z.array(z.string())
+      })
+    }
+  })
   .callback(
     async ({
       pb,
       core: {
         validation: { checkModulesAvailability }
-      }
+      },
+      response
     }) => {
       const walletModuleAvailable = checkModulesAvailability('wallet')
 
       if (!walletModuleAvailable) {
-        return { cleanedCount: 0, entries: [] }
+        return response.ok({ cleanedCount: 0, entries: [] })
       }
 
-      // Get all entries that have a wallet_entry_id
       const entriesWithWallet = await pb.getFullList
         .collection('entries')
         .filter([{ field: 'wallet_entry_id', operator: '!=', value: '' }])
@@ -390,15 +425,12 @@ export const cleanupOrphanedWalletLinks = forge
 
       const cleanedEntries: string[] = []
 
-      // Check each linked wallet transaction
       for (const entry of entriesWithWallet) {
         try {
-          // Try to fetch the wallet transaction
           await pb.instance
             .collection('wallet__transactions')
             .getOne(entry.wallet_entry_id)
         } catch {
-          // If wallet transaction doesn't exist, clear the link
           await pb.update
             .collection('entries')
             .id(entry.id)
@@ -411,25 +443,31 @@ export const cleanupOrphanedWalletLinks = forge
         }
       }
 
-      return {
+      return response.ok({
         cleanedCount: cleanedEntries.length,
         entries: cleanedEntries
-      }
+      })
     }
   )
 
 export const remove = forge
-  .mutation()
-  .description('Delete an entry')
-  .input({
-    query: z.object({
-      id: z.string()
-    })
+  .mutation({
+    description: 'Delete an entry',
+    input: {
+      query: z.object({
+        id: z.string()
+      })
+    },
+    existenceCheck: {
+      query: { id: 'entries' }
+    },
+    output: {
+      NO_CONTENT: true,
+      NOT_FOUND: true
+    }
   })
-  .existenceCheck('query', {
-    id: 'entries'
+  .callback(async ({ pb, query: { id }, response }) => {
+    await pb.delete.collection('entries').id(id).execute()
+
+    return response.noContent()
   })
-  .statusCode(204)
-  .callback(({ pb, query: { id } }) =>
-    pb.delete.collection('entries').id(id).execute()
-  )
