@@ -9,10 +9,10 @@ import {
   Widget,
   WithQuery,
   useModalStore
-} from 'lifeforge-ui'
+} from '@lifeforge/ui'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { InferOutput } from 'shared'
+import type { InferOutput } from '@lifeforge/shared'
 
 import Amount from './components/Amount'
 import ModifyPaymentEntryModal from './components/ModifyPaymentEntryModal'

@@ -8,10 +8,10 @@ import {
   ContextMenuItem,
   TagChip,
   useModalStore
-} from 'lifeforge-ui'
+} from '@lifeforge/ui'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import { usePersonalization } from 'shared'
+import { usePersonalization } from '@lifeforge/shared'
 import COLORS from 'tailwindcss/colors'
 
 import LinkWalletTransactionModal from '@/components/LinkWalletTransactionModal'

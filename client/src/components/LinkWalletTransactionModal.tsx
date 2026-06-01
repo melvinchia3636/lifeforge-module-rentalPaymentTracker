@@ -7,11 +7,11 @@ import {
   Scrollbar,
   SearchInput,
   WithQuery
-} from 'lifeforge-ui'
+} from '@lifeforge/ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { AutoSizer } from 'react-virtualized'
-import { usePromiseLoading } from 'shared'
+import { usePromiseLoading } from '@lifeforge/shared'
 
 import forgeAPI from '@/utils/forgeAPI'
 

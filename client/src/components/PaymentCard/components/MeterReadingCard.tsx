@@ -1,7 +1,8 @@
 import type { PaymentEntry } from '@'
 import { Icon } from '@iconify/react'
-import { Card } from 'lifeforge-ui'
 import { useTranslation } from 'react-i18next'
+
+import { Card } from '@lifeforge/ui'
 
 function MeterReadingCard({ entry }: { entry: PaymentEntry }) {
   const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')

@@ -1,4 +1,4 @@
-import type { InferOutput } from 'shared'
+import type { InferOutput } from '@lifeforge/shared'
 
 import type { PaymentEntry } from '../index'
 import forgeAPI from './forgeAPI'

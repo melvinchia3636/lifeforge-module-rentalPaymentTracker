@@ -1,10 +1,10 @@
 import type { PaymentEntry } from '@'
 import { Icon } from '@iconify/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { FormModal, defineForm } from 'lifeforge-ui'
+import { FormModal, defineForm } from '@lifeforge/ui'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import { type InferInput, getFormFileFieldInitialData } from 'shared'
+import { type InferInput, getFormFileFieldInitialData } from '@lifeforge/shared'
 
 import forgeAPI from '../utils/forgeAPI'
 

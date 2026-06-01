@@ -2,7 +2,8 @@ import type { PaymentEntry } from '@'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Trans, useTranslation } from 'react-i18next'
-import { usePersonalization } from 'shared'
+
+import { usePersonalization } from '@lifeforge/shared'
 
 import type { CalculatedPayment } from '@/utils/calculations'
 
