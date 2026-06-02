@@ -1,21 +1,23 @@
 import type { PaymentEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { AutoSizer } from 'react-virtualized'
+
+import { usePromiseLoading } from '@lifeforge/shared'
 import {
   Button,
   EmptyStateScreen,
+  Flex,
   ModalHeader,
   Scrollbar,
   SearchInput,
   WithQuery
 } from '@lifeforge/ui'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import { AutoSizer } from 'react-virtualized'
-import { usePromiseLoading } from '@lifeforge/shared'
 
 import forgeAPI from '@/utils/forgeAPI'
 
-import TransactionListItem from './TransactionListItem'
+import TransactionListItem from './components/TransactionListItem'
 
 function LinkWalletTransactionModal({
   data: { entry },
@@ -54,7 +56,9 @@ function LinkWalletTransactionModal({
     forgeAPI.entries.linkWalletTransaction.mutationOptions({
       onSuccess: () => {
         toast.success('Transaction linked successfully')
-        queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
+        queryClient.invalidateQueries({
+          queryKey: ['melvinchia3636--rentalPaymentTracker']
+        })
         queryClient.invalidateQueries({ queryKey: ['wallet'] })
         onClose()
       },
@@ -84,21 +88,21 @@ function LinkWalletTransactionModal({
   const [loading, onLinkTransaction] = usePromiseLoading(handleLinkTransaction)
 
   return (
-    <div className="flex min-h-[80vh] min-w-[60vw] flex-col">
+    <Flex direction="column" minHeight="80vh" minWidth="60vw">
       <ModalHeader
         icon="tabler:wallet"
         title="Link Wallet Transaction"
         onClose={onClose}
       />
       <SearchInput
-        className="component-bg-lighter"
+        bg="bg-100"
         debounceMs={300}
         searchTarget="transactions"
         value={searchQuery}
         onChange={setSearchQuery}
       />
       {searchQuery.length === 0 ? (
-        <div className="flex-center flex-1">
+        <Flex centered flex="1">
           <EmptyStateScreen
             icon="tabler:search"
             message={{
@@ -106,40 +110,45 @@ function LinkWalletTransactionModal({
               namespace: 'apps.melvinchia3636$rentalPaymentTracker'
             }}
           />
-        </div>
+        </Flex>
       ) : (
         <WithQuery query={transactionQuery}>
           {transactions => (
             <>
               {transactions.length === 0 ? (
-                <div className="flex-center flex-1">
+                <Flex centered flex="1">
                   <EmptyStateScreen
                     message={{
                       id: 'noTransactionsFound',
                       namespace: 'apps.melvinchia3636$rentalPaymentTracker'
                     }}
                   />
-                </div>
+                </Flex>
               ) : (
-                <div className="h-full min-h-0 flex-1">
+                <Flex flex="1" height="100%" minHeight="0">
                   <AutoSizer>
                     {({ width, height }) => (
                       <Scrollbar
-                        className="mt-6"
+                        mt="lg"
                         style={{
                           width,
                           height
                         }}
                       >
-                        <ul className="space-y-3">
+                        <Flex as="ul" direction="column" gap="sm" height="100%">
                           {transactions.map(transaction => (
                             <li
                               key={transaction.id}
-                              className={`cursor-pointer border-2 transition-all ${
-                                selectedTransactionId?.id === transaction.id
-                                  ? 'border-custom-500'
-                                  : 'border-transparent'
-                              } rounded-lg`}
+                              style={{
+                                cursor: 'pointer',
+                                border: '2px solid',
+                                borderColor:
+                                  selectedTransactionId?.id === transaction.id
+                                    ? 'var(--color-custom-500)'
+                                    : 'transparent',
+                                borderRadius: 'var(--radius-lg)',
+                                transition: 'all 150ms'
+                              }}
                               onClick={() => {
                                 setSelectedTransactionId(old =>
                                   old?.id === transaction.id
@@ -148,32 +157,31 @@ function LinkWalletTransactionModal({
                                 )
                               }}
                             >
-                              <TransactionListItem
-                                className="component-bg-lighter"
-                                transaction={transaction}
-                              />
+                              <TransactionListItem transaction={transaction} />
                             </li>
                           ))}
-                        </ul>
+                        </Flex>
                       </Scrollbar>
                     )}
                   </AutoSizer>
-                </div>
+                </Flex>
               )}
             </>
           )}
         </WithQuery>
       )}
       <Button
-        className="mt-auto"
         disabled={!selectedTransactionId}
         icon="tabler:link"
         loading={loading}
+        style={{
+          marginTop: 'auto'
+        }}
         onClick={onLinkTransaction}
       >
         Link Transaction
       </Button>
-    </div>
+    </Flex>
   )
 }
 

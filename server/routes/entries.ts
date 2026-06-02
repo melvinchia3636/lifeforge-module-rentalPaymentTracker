@@ -50,7 +50,10 @@ export const create = forge
           created: true,
           updated: true,
           meter_reading_image: true,
-          bank_statement: true
+          bank_statement: true,
+          id: true,
+          collectionId: true,
+          collectionName: true
         })
         .extend({
           auto_create_wallet_transaction: z.boolean().optional()
@@ -181,7 +184,10 @@ export const update = forge
         created: true,
         updated: true,
         meter_reading_image: true,
-        bank_statement: true
+        bank_statement: true,
+        id: true,
+        collectionId: true,
+        collectionName: true
       })
     },
     media: {

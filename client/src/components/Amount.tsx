@@ -1,13 +1,25 @@
+import { Flex, Text, type FlexProps } from '@lifeforge/ui'
+
 import numberToCurrency from '@/utils/numberToCurrency'
-import clsx from 'clsx'
 
-function Amount({ amount, className }: { amount: number; className?: string }) {
+function Amount({
+  amount,
+  display
+}: {
+  amount: number
+  display?: FlexProps['display']
+}) {
   return (
-    <p className={clsx('flex items-end text-3xl font-medium', className)}>
-      <span className="text-bg-500 mr-2 text-xl">RM</span>
-
-      <span className="truncate">{numberToCurrency(amount)}</span>
-    </p>
+    <Flex align="end" as="p" display={display}>
+      <Text color="muted" mr="sm" size="xl">
+        RM
+      </Text>
+      <Flex asChild maxWidth="100%">
+        <Text truncate size="5xl" weight="medium">
+          {numberToCurrency(amount)}
+        </Text>
+      </Flex>
+    </Flex>
   )
 }
 

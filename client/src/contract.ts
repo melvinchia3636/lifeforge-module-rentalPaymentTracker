@@ -80,15 +80,6 @@ export const contract = {
             "wallet_entry_id": {
               "type": "string"
             },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
-            },
             "auto_create_wallet_transaction": {
               "type": "boolean"
             }
@@ -103,10 +94,7 @@ export const contract = {
             "utility_bill",
             "rental_fee",
             "amount_paid",
-            "wallet_entry_id",
-            "id",
-            "collectionId",
-            "collectionName"
+            "wallet_entry_id"
           ],
           "additionalProperties": false
         }
@@ -691,15 +679,6 @@ export const contract = {
               "type": "number"
             },
             "wallet_entry_id": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
               "type": "string"
             }
           },

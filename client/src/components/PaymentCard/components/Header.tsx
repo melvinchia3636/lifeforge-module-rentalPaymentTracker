@@ -1,23 +1,25 @@
 import type { PaymentEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
+
+import { usePersonalization } from '@lifeforge/shared'
 import {
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
-  TagChip,
+  Flex,
+  Text,
+  surface,
   useModalStore
 } from '@lifeforge/ui'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
-import { usePersonalization } from '@lifeforge/shared'
-import COLORS from 'tailwindcss/colors'
 
-import LinkWalletTransactionModal from '@/components/LinkWalletTransactionModal'
-import ModifyPaymentEntryModal from '@/components/ModifyPaymentEntryModal'
+import LinkWalletTransactionModal from '@/components/modals/LinkWalletTransactionModal'
+import ModifyPaymentEntryModal from '@/components/modals/ModifyPaymentEntryModal'
 import type { CalculatedPayment } from '@/utils/calculations'
 import forgeAPI from '@/utils/forgeAPI'
+
+import StatusChip from './StatusChip'
 
 function Header({
   entry,
@@ -36,16 +38,12 @@ function Header({
 
   const { language } = usePersonalization()
 
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
-
   const { totalPayable, electricityBill, amountPaid } = calculations
-
-  const isExcessPayment = amountPaid >= totalPayable
 
   const walletAvailabilityQuery = useQuery(
     forgeAPI
       .checkModuleAvailability({
-        moduleId: 'wallet'
+        moduleId: 'lifeforge--wallet'
       })
       .queryOptions()
   )
@@ -57,7 +55,9 @@ function Header({
       })
       .mutationOptions({
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
+          queryClient.invalidateQueries({
+            queryKey: ['melvinchia3636--rentalPaymentTracker']
+          })
         },
         onError: () => {
           toast.error('Failed to delete the payment entry.')
@@ -68,7 +68,9 @@ function Header({
   const unlinkWalletMutation = useMutation(
     forgeAPI.entries.unlinkWalletTransaction.mutationOptions({
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['rentalPaymentTracker'] })
+        queryClient.invalidateQueries({
+          queryKey: ['melvinchia3636--rentalPaymentTracker']
+        })
         queryClient.invalidateQueries({ queryKey: ['wallet'] })
         toast.success('Wallet transaction unlinked successfully')
       },
@@ -85,7 +87,7 @@ function Header({
         'Are you sure you want to delete this payment entry? This action cannot be undone.',
       confirmButton: 'delete',
       onConfirm: async () => {
-        await removeEntryMutation.mutateAsync({})
+        await removeEntryMutation.mutateAsync(undefined)
       }
     })
   }
@@ -105,11 +107,12 @@ function Header({
   }
 
   return (
-    <header
-      className={clsx(
-        'flex items-center justify-between p-4',
-        breakdownCollapsed && 'component-bg-with-hover cursor-pointer'
-      )}
+    <Flex
+      as="header"
+      bg={breakdownCollapsed ? surface.defaultInteractive : undefined}
+      justify="between"
+      p="md"
+      style={breakdownCollapsed ? { cursor: 'pointer' } : undefined}
       onClick={() => {
         if (!breakdownCollapsed) return
 
@@ -117,36 +120,26 @@ function Header({
       }}
     >
       <div>
-        <h3 className="text-xl font-semibold print:text-[24px]">
+        <Text as="h3" size={{ base: 'xl', print: '2xl' }} weight="semibold">
           {dayjs()
             .month(entry.month - 1)
             .year(entry.year)
             .locale(language)
             .format(language.startsWith('zh') ? 'YYYY年MM月' : 'MMM YYYY')}
-        </h3>
-        <p className="text-bg-500 mt-1 print:text-zinc-500">
-          <span className="hidden md:inline">
+        </Text>
+        <Text color={{ base: 'bg-500', print: 'zinc-500' }} mt="xs">
+          <Text as="span" display={{ base: 'none', md: 'inline' }}>
             RM ({entry.rental_fee.toFixed(2)} + {entry.utility_bill.toFixed(2)}{' '}
             + {electricityBill.toFixed(2)}) ={' '}
-          </span>
-          <span className="text-custom-500 font-medium">
+          </Text>
+          <Text as="span" color="custom-500" weight="medium">
             RM {totalPayable.toFixed(2)}
-          </span>
-        </p>
+          </Text>
+        </Text>
       </div>
-      <div className="flex items-center gap-4">
-        <TagChip
-          color={isExcessPayment ? COLORS.green[500] : COLORS.orange[500]}
-          icon={isExcessPayment ? 'tabler:check' : 'tabler:alert-circle'}
-          label={
-            <span className="hidden sm:inline">
-              {isExcessPayment
-                ? t('paymentCard.paidExcess')
-                : t('paymentCard.paymentShortfall')}
-            </span>
-          }
-        />
-        <div className="flex items-center gap-2">
+      <Flex align="center" gap="md">
+        <StatusChip amountPaid={amountPaid} totalPayable={totalPayable} />
+        <Flex display={{ print: 'none' }}>
           {!breakdownCollapsed && (
             <ContextMenu
               classNames={{
@@ -190,9 +183,9 @@ function Header({
               />
             </ContextMenu>
           )}
-        </div>
-      </div>
-    </header>
+        </Flex>
+      </Flex>
+    </Flex>
   )
 }
 

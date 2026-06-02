@@ -1,4 +1,8 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import type { InferOutput } from '@lifeforge/shared'
 import {
   Button,
   ContextMenuItem,
@@ -6,18 +10,16 @@ import {
   FAB,
   ModuleHeader,
   Scrollbar,
+  Stack,
   Widget,
   WithQuery,
   useModalStore
 } from '@lifeforge/ui'
-import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import type { InferOutput } from '@lifeforge/shared'
 
 import Amount from './components/Amount'
-import ModifyPaymentEntryModal from './components/ModifyPaymentEntryModal'
 import PaymentCard from './components/PaymentCard'
-import SettingsModal from './components/SettingsModal'
+import ModifyPaymentEntryModal from './components/modals/ModifyPaymentEntryModal'
+import SettingsModal from './components/modals/SettingsModal'
 import './index.css'
 import {
   type CalculatedPayment,
@@ -46,7 +48,7 @@ function RentalPaymentTracker() {
   useEffect(() => {
     const cleanup = async () => {
       try {
-        await forgeAPI.entries.cleanupOrphanedWalletLinks.mutate({})
+        await forgeAPI.entries.cleanupOrphanedWalletLinks.mutate(undefined)
       } catch (error) {
         // Silent fail - this is a background cleanup task
         console.debug('Wallet link cleanup completed or skipped', error)
@@ -119,7 +121,7 @@ function RentalPaymentTracker() {
       <ModuleHeader
         actionButton={
           <Button
-            className="hidden md:flex"
+            display={{ base: 'none', md: 'flex' }}
             icon="tabler:plus"
             tProps={{
               item: t('items.payment')
@@ -170,11 +172,11 @@ function RentalPaymentTracker() {
                           ].currentPrepayment
                         : 0
                     }
-                    className="hidden sm:flex"
+                    display={{ base: 'none', sm: 'flex' }}
                   />
                 }
-                className="mb-6 h-min"
                 icon="tabler:cash-plus"
+                mb="lg"
                 namespace="apps.melvinchia3636$rentalPaymentTracker"
                 title="Prepaid Amount"
               >
@@ -185,10 +187,10 @@ function RentalPaymentTracker() {
                           .currentPrepayment
                       : 0
                   }
-                  className="flex-center w-full sm:hidden"
+                  display={{ base: 'flex', sm: 'none' }}
                 />
               </Widget>
-              <div className="space-y-3 pb-8">
+              <Stack mb="lg">
                 {entries.map(entry => {
                   const calc = calculations.get(entry.id)
 
@@ -202,13 +204,12 @@ function RentalPaymentTracker() {
                     />
                   )
                 })}
-              </div>
+              </Stack>
             </Scrollbar>
           )
         }
       </WithQuery>
       <FAB
-        className="fixed right-6 bottom-6 md:hidden"
         icon="tabler:plus"
         onClick={() => {
           open(ModifyPaymentEntryModal, {

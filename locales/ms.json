@@ -80,6 +80,7 @@
   "paymentCard": {
     "payableAmount": "Jumlah perlu dibayar",
     "paidExcess": "Lebihan Dibayar",
+    "paidExact": "Bayaran Tepat",
     "paymentShortfall": "Kekurangan Pembayaran",
     "meterReading": "Bacaan Meter",
     "last": "Lepas",

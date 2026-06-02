@@ -1,13 +1,14 @@
-import { type APIRoutes } from '@server/routes.types'
-
 import { createForgeProxy } from '@lifeforge/shared'
 
-if (!import.meta.env.VITE_API_HOST) {
+import contract from '@/contract'
+
+if (!(window as any).VITE_API_HOST) {
   throw new Error('VITE_API_HOST is not defined')
 }
 
-const forgeAPI = createForgeProxy<APIRoutes>(
-  import.meta.env.VITE_API_HOST,
+const forgeAPI = createForgeProxy(
+  contract,
+  import.meta.env.VITE_API_HOST || (window as any).VITE_API_HOST,
   'melvinchia3636--rentalPaymentTracker'
 )
 

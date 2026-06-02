@@ -80,6 +80,7 @@
   "paymentCard": {
     "payableAmount": "應付金額",
     "paidExcess": "已超額支付",
+    "paidExact": "已精確支付",
     "paymentShortfall": "支付不足",
     "meterReading": "電錶讀數",
     "last": "上次",

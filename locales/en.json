@@ -80,6 +80,7 @@
   "paymentCard": {
     "payableAmount": "Payable amount",
     "paidExcess": "Paid Excess",
+    "paidExact": "Paid Exact",
     "paymentShortfall": "Payment Shortfall",
     "meterReading": "Meter Reading",
     "last": "Last",

@@ -1,14 +1,23 @@
 import type { PaymentEntry } from '@'
-import { Icon } from '@iconify/react'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { Button, ViewImageModal, useModalStore } from '@lifeforge/ui'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
-import { useDivSize } from '@lifeforge/shared'
 
-import TransactionListItem from '@/components/TransactionListItem'
+import { useDivSize } from '@lifeforge/shared'
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Stack,
+  Text,
+  ViewImageModal,
+  useModalStore
+} from '@lifeforge/ui'
+
+import TransactionListItem from '@/components/modals/LinkWalletTransactionModal/components/TransactionListItem'
 import type { CalculatedPayment } from '@/utils/calculations'
 import forgeAPI from '@/utils/forgeAPI'
 
@@ -64,14 +73,6 @@ function DetailsSection({
 
   const reactToPrintFn = useReactToPrint({
     contentRef: ref,
-    fonts: fontQuery.data?.items?.length
-      ? [
-          {
-            family: fontQuery.data.items[0].family,
-            source: fontQuery.data.items[0].files.regular || ''
-          }
-        ]
-      : [],
     documentTitle: `RentalPayment_${dayjs()
       .month(entry.month - 1)
       .year(entry.year)
@@ -85,31 +86,39 @@ function DetailsSection({
   }
 
   return (
-    <div
-      className="space-y-2 overflow-hidden transition-all duration-300"
+    <Box
+      className="transition-all duration-300"
+      overflow="hidden"
       style={{ maxHeight: collapsed ? 0 : height }}
     >
-      <div ref={thisRef} className="space-y-2 p-4 pt-6">
+      <Stack ref={thisRef} gap="sm" p="md" pt="lg">
         <MeterReadingCard entry={entry} />
         <BreakdownTable calculations={calculations} entry={entry} />
         {walletEntryQuery.data && (
-          <div className="mt-6 space-y-3 print:hidden">
-            <h3 className="text-bg-500 flex items-center gap-2 text-lg font-semibold print:text-zinc-500">
-              <Icon className="size-6" icon="tabler:wallet" />
-              {t('paymentCard.linkedWalletTransaction')}
-            </h3>
-            <TransactionListItem
-              className="component-bg-lighter hover:bg-bg-200! dark:hover:bg-bg-800! print:bg-zinc-100"
-              transaction={walletEntryQuery.data}
-            />
-          </div>
+          <Stack display={{ base: 'flex', print: 'none' }} gap="sm" mt="lg">
+            <Flex align="center" gap="sm">
+              <Icon
+                color={{ base: 'bg-500', print: 'zinc-500' }}
+                icon="tabler:wallet"
+                size="1.5em"
+              />
+              <Text
+                color={{ base: 'bg-500', print: 'zinc-500' }}
+                size="lg"
+                weight="semibold"
+              >
+                {t('paymentCard.linkedWalletTransaction')}
+              </Text>
+            </Flex>
+            <TransactionListItem transaction={walletEntryQuery.data} />
+          </Stack>
         )}
-        <div className="mt-8 space-y-2 print:hidden">
+        <Stack display={{ base: 'flex', print: 'none' }} gap="sm" mt="2xl">
           {(entry.meter_reading_image || entry.bank_statement) && (
-            <div className="flex flex-col gap-2 md:flex-row">
+            <Flex direction={{ base: 'column', md: 'row' }} gap="sm">
               {entry.meter_reading_image && (
                 <Button
-                  className="flex-1"
+                  flex="1"
                   icon="tabler:photo"
                   namespace="apps.melvinchia3636$rentalPaymentTracker"
                   variant="secondary"
@@ -126,9 +135,9 @@ function DetailsSection({
                   View Meter Reading Image
                 </Button>
               )}
-              {
+              {entry.bank_statement && (
                 <Button
-                  className="flex-1"
+                  flex="1"
                   icon="tabler:report-money"
                   namespace="apps.melvinchia3636$rentalPaymentTracker"
                   variant="secondary"
@@ -144,31 +153,34 @@ function DetailsSection({
                 >
                   View Bank Statement
                 </Button>
-              }
-            </div>
+              )}
+            </Flex>
           )}
           <Button
-            className="mt-4 w-full"
             icon="tabler:printer"
             loading={fontQuery.isLoading}
+            mt="md"
             namespace="apps.melvinchia3636$rentalPaymentTracker"
             variant="primary"
+            width="100%"
             onClick={reactToPrintFn}
           >
             print
           </Button>
-        </div>
+        </Stack>
         <Button
-          className="mt-4 w-full print:hidden"
+          display={{ base: 'flex', print: 'none' }}
           icon="tabler:chevron-up"
+          mt="md"
           namespace="apps.melvinchia3636$rentalPaymentTracker"
           variant="plain"
+          width="100%"
           onClick={() => setCollapsed(true)}
         >
           collapse Details
         </Button>
-      </div>
-    </div>
+      </Stack>
+    </Box>
   )
 }
 
