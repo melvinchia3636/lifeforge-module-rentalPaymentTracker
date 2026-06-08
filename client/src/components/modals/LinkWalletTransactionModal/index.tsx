@@ -15,7 +15,7 @@ import {
   WithQuery
 } from '@lifeforge/ui'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import TransactionListItem from './components/TransactionListItem'
 

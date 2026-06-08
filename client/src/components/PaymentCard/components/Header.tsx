@@ -17,7 +17,7 @@ import {
 import LinkWalletTransactionModal from '@/components/modals/LinkWalletTransactionModal'
 import ModifyPaymentEntryModal from '@/components/modals/ModifyPaymentEntryModal'
 import type { CalculatedPayment } from '@/utils/calculations'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import StatusChip from './StatusChip'
 

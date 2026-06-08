@@ -19,7 +19,7 @@ import {
 
 import TransactionListItem from '@/components/modals/LinkWalletTransactionModal/components/TransactionListItem'
 import type { CalculatedPayment } from '@/utils/calculations'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import BreakdownTable from './BreakdownTable'
 import MeterReadingCard from './MeterReadingCard'
