@@ -10,7 +10,8 @@ import {
   Text,
   surface,
   toast,
-  useModalStore
+  useModalStore,
+  usePersonalization
 } from '@lifeforge/ui'
 
 import LinkWalletTransactionModal from '@/components/modals/LinkWalletTransactionModal'
@@ -34,6 +35,8 @@ function Header({
   const queryClient = useQueryClient()
 
   const { open } = useModalStore()
+
+  const { language } = usePersonalization()
 
   const { totalPayable, electricityBill, amountPaid } = calculations
 
@@ -119,9 +122,10 @@ function Header({
       <div>
         <Text as="h3" size={{ base: 'xl', print: '2xl' }} weight="semibold">
           {dayjs()
-            .month((entry.month || dayjs().month()) - 1)
-            .year(entry.year || dayjs().year())
-            .format('MMM YYYY')}
+            .month(entry.month - 1)
+            .year(entry.year)
+            .locale(language)
+            .format(language.startsWith('zh') ? 'YYYY年MM月' : 'MMM YYYY')}
         </Text>
         <Text color={{ base: 'bg-500', print: 'zinc-500' }} mt="xs">
           <Text as="span" display={{ base: 'none', md: 'inline' }}>

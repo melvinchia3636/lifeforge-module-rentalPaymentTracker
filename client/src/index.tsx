@@ -2,7 +2,7 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { InferOutput } from '@lifeforge/api'
+import { type InferOutput, fetchAPI } from '@lifeforge/api'
 import {
   Button,
   ContextMenuItem,
@@ -77,10 +77,10 @@ function RentalPaymentTracker() {
     queries: walletEntryIds.map(({ entryId, walletId }) => ({
       queryKey: ['wallet', 'transaction', walletId],
       queryFn: async () => {
-        const result = await forgeAPI
-          .untyped('/wallet/transactions/getById')
-          .input({ id: walletId })
-          .query()
+        const result = await fetchAPI(
+          import.meta.env.VITE_API_HOST,
+          `/modules/444fbd5671dabea6430b9bf6cb879fe1a4f79c0107bf639d662eb6d9a3cdd7d1/transactions/getById?id=${walletId}`
+        )
 
         return { entryId, amount: (result as { amount: number }).amount }
       },
