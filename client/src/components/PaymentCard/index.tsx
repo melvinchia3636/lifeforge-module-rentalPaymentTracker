@@ -2,8 +2,7 @@ import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { usePersonalization } from '@lifeforge/shared'
-import { Card, Flex, PrintArea, Text } from '@lifeforge/ui'
+import { usePersonalization , Card, Flex, PrintArea, Text } from '@lifeforge/ui'
 
 import type { PaymentEntry } from '../../index'
 import type { CalculatedPayment } from '../../utils/calculations'

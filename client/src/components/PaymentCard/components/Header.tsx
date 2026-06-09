@@ -1,10 +1,8 @@
 import type { PaymentEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { toast } from 'react-toastify'
 
-import { usePersonalization } from '@lifeforge/shared'
-import {
+import { toast , usePersonalization ,
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
@@ -16,8 +14,8 @@ import {
 
 import LinkWalletTransactionModal from '@/components/modals/LinkWalletTransactionModal'
 import ModifyPaymentEntryModal from '@/components/modals/ModifyPaymentEntryModal'
-import type { CalculatedPayment } from '@/utils/calculations'
 import { forgeAPI } from '@/manifest'
+import type { CalculatedPayment } from '@/utils/calculations'
 
 import StatusChip from './StatusChip'
 

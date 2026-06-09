@@ -2,7 +2,7 @@ import type { PaymentEntry } from '@'
 import dayjs from 'dayjs'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { usePersonalization } from '@lifeforge/shared'
+import { usePersonalization } from '@lifeforge/ui'
 
 import type { CalculatedPayment } from '@/utils/calculations'
 
@@ -54,7 +54,9 @@ function BreakdownTable({
 
         <tr className={styles.row}>
           <td className={styles.label}>
-            <span style={{ fontWeight: 600 }}>{t('paymentCard.totalPayable')}:</span>
+            <span style={{ fontWeight: 600 }}>
+              {t('paymentCard.totalPayable')}:
+            </span>
           </td>
           <td className={styles.totalValue}>
             <div className={styles.totalDivider}>{totalPayable.toFixed(2)}</div>
@@ -63,7 +65,9 @@ function BreakdownTable({
 
         <tr className={styles.row}>
           <td className={styles.label}>{t('paymentCard.paymentMade')}</td>
-          <td className={`${styles.green} ${styles.value}`}>{amountPaid.toFixed(2)}</td>
+          <td className={`${styles.green} ${styles.value}`}>
+            {amountPaid.toFixed(2)}
+          </td>
         </tr>
         <tr className={styles.row}>
           <td className={styles.label}>
@@ -79,9 +83,13 @@ function BreakdownTable({
 
         <tr className={styles.row}>
           <td className={styles.label}>
-            <span style={{ fontWeight: 600 }}>{t('paymentCard.paymentExcessShortfall')}:</span>
+            <span style={{ fontWeight: 600 }}>
+              {t('paymentCard.paymentExcessShortfall')}:
+            </span>
           </td>
-          <td className={`${styles.value} ${amountPaid - totalPayable >= 0 ? styles.green : styles.red}`}>
+          <td
+            className={`${styles.value} ${amountPaid - totalPayable >= 0 ? styles.green : styles.red}`}
+          >
             {amountPaid - totalPayable >= 0
               ? (amountPaid - totalPayable).toFixed(2)
               : `(${(totalPayable - amountPaid).toFixed(2)})`}

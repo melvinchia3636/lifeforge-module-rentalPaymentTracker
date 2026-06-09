@@ -2,7 +2,7 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { InferOutput } from '@lifeforge/shared'
+import type { InferOutput } from '@lifeforge/api'
 import {
   Button,
   ContextMenuItem,

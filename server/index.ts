@@ -3,11 +3,11 @@ import { forgeRouter, writeContractFileToClient } from '@lifeforge/server-utils'
 import * as entriesRoutes from './routes/entries'
 import * as settingsRoutes from './routes/settings'
 
-const nice = forgeRouter({
+const routes = forgeRouter({
   entries: entriesRoutes,
   settings: settingsRoutes
 })
 
-writeContractFileToClient(nice, import.meta.dirname)
+writeContractFileToClient(routes, import.meta.dirname)
 
-export default nice
+export default routes
