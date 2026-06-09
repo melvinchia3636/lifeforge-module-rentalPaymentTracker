@@ -22,7 +22,6 @@ import Amount from './components/Amount'
 import PaymentCard from './components/PaymentCard'
 import ModifyPaymentEntryModal from './components/modals/ModifyPaymentEntryModal'
 import SettingsModal from './components/modals/SettingsModal'
-import './index.css'
 import {
   type CalculatedPayment,
   calculateAllPrepayments
