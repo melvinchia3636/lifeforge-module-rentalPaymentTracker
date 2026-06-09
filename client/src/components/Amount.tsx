@@ -1,4 +1,4 @@
-import { Flex, Text, type FlexProps } from '@lifeforge/ui'
+import { Flex, type FlexProps, Text } from '@lifeforge/ui'
 
 import numberToCurrency from '@/utils/numberToCurrency'
 

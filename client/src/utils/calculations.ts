@@ -1,7 +1,8 @@
 import type { InferOutput } from '@lifeforge/api'
 
+import { forgeAPI } from '@/manifest'
+
 import type { PaymentEntry } from '../index'
-import { forgeAPI } from '@/manifest';
 
 type Settings = InferOutput<typeof forgeAPI.settings.get>
 
