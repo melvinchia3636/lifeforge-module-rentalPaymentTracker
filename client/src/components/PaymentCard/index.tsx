@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { usePersonalization , Card, Flex, PrintArea, Text } from '@lifeforge/ui'
+import { Card, Flex, PrintArea, Text, usePersonalization } from '@lifeforge/ui'
 
 import type { PaymentEntry } from '../../index'
 import type { CalculatedPayment } from '../../utils/calculations'
@@ -15,7 +15,7 @@ interface PaymentCardProps {
 }
 
 export default function PaymentCard({ entry, calculations }: PaymentCardProps) {
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   const ref = useRef<HTMLDivElement>(null)
 

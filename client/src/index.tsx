@@ -16,6 +16,8 @@ import {
   useModalStore
 } from '@lifeforge/ui'
 
+import { forgeAPI } from '@/manifest'
+
 import Amount from './components/Amount'
 import PaymentCard from './components/PaymentCard'
 import ModifyPaymentEntryModal from './components/modals/ModifyPaymentEntryModal'
@@ -25,12 +27,11 @@ import {
   type CalculatedPayment,
   calculateAllPrepayments
 } from './utils/calculations'
-import forgeAPI from './utils/forgeAPI'
 
 export type PaymentEntry = InferOutput<typeof forgeAPI.entries.getById>
 
 function RentalPaymentTracker() {
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   const { open } = useModalStore()
 
@@ -41,6 +42,8 @@ function RentalPaymentTracker() {
       enabled: ready
     })
   )
+
+  console.log(entriesQuery.data)
 
   const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
 
@@ -141,7 +144,7 @@ function RentalPaymentTracker() {
               <ContextMenuItem
                 icon="tabler:settings"
                 label="settings"
-                namespace="apps.melvinchia3636$rentalPaymentTracker"
+                namespace="apps.melvinchia3636--rental-payment-tracker"
                 onClick={() => {
                   open(SettingsModal, {})
                 }}
@@ -157,7 +160,7 @@ function RentalPaymentTracker() {
               icon="tabler:receipt-off"
               message={{
                 id: 'payment',
-                namespace: 'apps.melvinchia3636$rentalPaymentTracker'
+                namespace: 'apps.melvinchia3636--rental-payment-tracker'
               }}
             />
           ) : (
@@ -177,7 +180,7 @@ function RentalPaymentTracker() {
                 }
                 icon="tabler:cash-plus"
                 mb="lg"
-                namespace="apps.melvinchia3636$rentalPaymentTracker"
+                namespace="apps.melvinchia3636--rental-payment-tracker"
                 title="Prepaid Amount"
               >
                 <Amount

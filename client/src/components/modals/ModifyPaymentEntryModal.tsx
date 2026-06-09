@@ -4,7 +4,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import z from 'zod'
 
-import { toast ,
+import {
   Box,
   CheckboxField,
   FileField,
@@ -17,10 +17,11 @@ import { toast ,
   convertFormFileFieldData,
   createDefaultValues,
   fileValueSchema,
-  getFormFileFieldInitialData
+  getFormFileFieldInitialData,
+  toast
 } from '@lifeforge/ui'
 
-import forgeAPI from '../../utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 const schema = z.object({
   month: z.number().min(1, 'Required').max(12),
@@ -48,7 +49,7 @@ export default function ModifyPaymentEntryModal({
     initialData?: import('@').PaymentEntry
   }
 }) {
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   const qc = useQueryClient()
 
@@ -168,7 +169,7 @@ export default function ModifyPaymentEntryModal({
       uiConfig={{
         icon: 'tabler:receipt',
         title: `payment.${openType}`,
-        namespace: 'apps.melvinchia3636$rentalPaymentTracker',
+        namespace: 'apps.melvinchia3636--rental-payment-tracker',
         onClose
       }}
     >

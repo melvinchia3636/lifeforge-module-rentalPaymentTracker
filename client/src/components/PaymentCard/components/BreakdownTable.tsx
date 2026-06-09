@@ -21,7 +21,7 @@ function BreakdownTable({
   entry: PaymentEntry
   calculations: CalculatedPayment
 }) {
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   const { language } = usePersonalization()
 
@@ -73,7 +73,7 @@ function BreakdownTable({
           <td className={styles.label}>
             <Trans
               i18nKey="paymentCard.lessTotalPayable"
-              ns="apps.melvinchia3636$rentalPaymentTracker"
+              ns="apps.melvinchia3636--rental-payment-tracker"
             />
           </td>
           <td className={`${styles.value} ${styles.borderBottom}`}>

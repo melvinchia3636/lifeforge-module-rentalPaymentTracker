@@ -2,13 +2,14 @@ import type { PaymentEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 
-import { toast , usePersonalization ,
+import {
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
   Flex,
   Text,
   surface,
+  toast,
   useModalStore
 } from '@lifeforge/ui'
 
@@ -33,8 +34,6 @@ function Header({
   const queryClient = useQueryClient()
 
   const { open } = useModalStore()
-
-  const { language } = usePersonalization()
 
   const { totalPayable, electricityBill, amountPaid } = calculations
 
@@ -120,10 +119,9 @@ function Header({
       <div>
         <Text as="h3" size={{ base: 'xl', print: '2xl' }} weight="semibold">
           {dayjs()
-            .month(entry.month - 1)
-            .year(entry.year)
-            .locale(language)
-            .format(language.startsWith('zh') ? 'YYYY年MM月' : 'MMM YYYY')}
+            .month((entry.month || dayjs().month()) - 1)
+            .year(entry.year || dayjs().year())
+            .format('MMM YYYY')}
         </Text>
         <Text color={{ base: 'bg-500', print: 'zinc-500' }} mt="xs">
           <Text as="span" display={{ base: 'none', md: 'inline' }}>
@@ -149,7 +147,7 @@ function Header({
                 <ContextMenuItem
                   icon="tabler:wallet"
                   label="Link Wallet Transaction"
-                  namespace="apps.melvinchia3636$rentalPaymentTracker"
+                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   onClick={() => {
                     open(LinkWalletTransactionModal, { entry })
                   }}
@@ -159,7 +157,7 @@ function Header({
                 <ContextMenuItem
                   icon="tabler:unlink"
                   label="Unlink Wallet Transaction"
-                  namespace="apps.melvinchia3636$rentalPaymentTracker"
+                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   onClick={handleUnlinkWallet}
                 />
               )}

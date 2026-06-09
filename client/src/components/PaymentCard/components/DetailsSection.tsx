@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 
-import { useDivSize ,
+import {
   Box,
   Button,
   Flex,
@@ -13,12 +13,13 @@ import { useDivSize ,
   Stack,
   Text,
   ViewImageModal,
+  useDivSize,
   useModalStore
 } from '@lifeforge/ui'
 
 import TransactionListItem from '@/components/modals/LinkWalletTransactionModal/components/TransactionListItem'
-import type { CalculatedPayment } from '@/utils/calculations'
 import { forgeAPI } from '@/manifest'
+import type { CalculatedPayment } from '@/utils/calculations'
 
 import BreakdownTable from './BreakdownTable'
 import MeterReadingCard from './MeterReadingCard'
@@ -42,7 +43,7 @@ function DetailsSection({
 
   const { open } = useModalStore()
 
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   const fontQuery = useQuery(
     forgeAPI
@@ -119,7 +120,7 @@ function DetailsSection({
                 <Button
                   flex="1"
                   icon="tabler:photo"
-                  namespace="apps.melvinchia3636$rentalPaymentTracker"
+                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -138,7 +139,7 @@ function DetailsSection({
                 <Button
                   flex="1"
                   icon="tabler:report-money"
-                  namespace="apps.melvinchia3636$rentalPaymentTracker"
+                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -159,7 +160,7 @@ function DetailsSection({
             icon="tabler:printer"
             loading={fontQuery.isLoading}
             mt="md"
-            namespace="apps.melvinchia3636$rentalPaymentTracker"
+            namespace="apps.melvinchia3636--rental-payment-tracker"
             variant="primary"
             width="100%"
             onClick={reactToPrintFn}
@@ -171,7 +172,7 @@ function DetailsSection({
           display={{ base: 'flex', print: 'none' }}
           icon="tabler:chevron-up"
           mt="md"
-          namespace="apps.melvinchia3636$rentalPaymentTracker"
+          namespace="apps.melvinchia3636--rental-payment-tracker"
           variant="plain"
           width="100%"
           onClick={() => setCollapsed(true)}

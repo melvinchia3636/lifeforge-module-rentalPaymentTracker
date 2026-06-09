@@ -13,7 +13,7 @@ function StatusChip({
 
   const isExcess = amountPaid > totalPayable
 
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   return (
     <TagChip

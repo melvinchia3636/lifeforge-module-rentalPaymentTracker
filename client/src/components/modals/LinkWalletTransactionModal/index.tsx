@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { AutoSizer } from 'react-virtualized'
 
 import { usePromiseLoading } from '@lifeforge/api'
-import { toast ,
+import {
   Button,
   EmptyStateScreen,
   Flex,
   ModalHeader,
   Scrollbar,
   SearchInput,
-  WithQuery
+  WithQuery,
+  toast
 } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
@@ -106,7 +107,7 @@ function LinkWalletTransactionModal({
             icon="tabler:search"
             message={{
               id: 'linkWalletQuery',
-              namespace: 'apps.melvinchia3636$rentalPaymentTracker'
+              namespace: 'apps.melvinchia3636--rental-payment-tracker'
             }}
           />
         </Flex>
@@ -119,7 +120,7 @@ function LinkWalletTransactionModal({
                   <EmptyStateScreen
                     message={{
                       id: 'noTransactionsFound',
-                      namespace: 'apps.melvinchia3636$rentalPaymentTracker'
+                      namespace: 'apps.melvinchia3636--rental-payment-tracker'
                     }}
                   />
                 </Flex>

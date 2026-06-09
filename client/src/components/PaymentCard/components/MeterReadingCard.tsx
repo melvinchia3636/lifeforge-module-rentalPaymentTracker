@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Card, Flex, Icon, Text, surface } from '@lifeforge/ui'
 
 function MeterReadingCard({ entry }: { entry: PaymentEntry }) {
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   return (
     <Card bg={{ ...surface.light, print: 'bg-100' }}>

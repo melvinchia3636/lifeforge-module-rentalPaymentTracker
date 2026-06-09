@@ -15,7 +15,7 @@ import {
   createDefaultValues
 } from '@lifeforge/ui'
 
-import forgeAPI from '../../utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 const schema = z.object({
   initial_prepayment: z.number().nonnegative(),
@@ -28,7 +28,7 @@ const schema = z.object({
 })
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
-  const { t } = useTranslation('apps.melvinchia3636$rentalPaymentTracker')
+  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
 
   const qc = useQueryClient()
 
@@ -122,7 +122,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
       uiConfig={{
         icon: 'tabler:settings',
         title: 'Settings',
-        namespace: 'apps.melvinchia3636$rentalPaymentTracker',
+        namespace: 'apps.melvinchia3636--rental-payment-tracker',
         loading: walletAvailabilityQuery.isLoading,
         onClose
       }}
