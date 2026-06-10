@@ -2,7 +2,7 @@ import type { PaymentEntry } from '@'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 import { useReactToPrint } from 'react-to-print'
 
 import {
@@ -43,7 +43,7 @@ function DetailsSection({
 
   const { open } = useModalStore()
 
-  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
+  const { t } = useModuleTranslation()
 
   const fontQuery = useQuery(
     forgeAPI

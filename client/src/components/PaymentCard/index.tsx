@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { Card, Flex, PrintArea, Text, usePersonalization } from '@lifeforge/ui'
 
@@ -15,7 +15,7 @@ interface PaymentCardProps {
 }
 
 export default function PaymentCard({ entry, calculations }: PaymentCardProps) {
-  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
+  const { t } = useModuleTranslation()
 
   const ref = useRef<HTMLDivElement>(null)
 

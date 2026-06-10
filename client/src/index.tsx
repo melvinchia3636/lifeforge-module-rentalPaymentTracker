@@ -1,6 +1,6 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { type InferOutput, fetchAPI } from '@lifeforge/api'
 import {
@@ -30,7 +30,7 @@ import {
 export type PaymentEntry = InferOutput<typeof forgeAPI.entries.getById>
 
 function RentalPaymentTracker() {
-  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
+  const { t } = useModuleTranslation()
 
   const { open } = useModalStore()
 

@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { TAILWIND_PALETTE, TagChip, Text } from '@lifeforge/ui'
 
@@ -13,7 +13,7 @@ function StatusChip({
 
   const isExcess = amountPaid > totalPayable
 
-  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
+  const { t } = useModuleTranslation()
 
   return (
     <TagChip

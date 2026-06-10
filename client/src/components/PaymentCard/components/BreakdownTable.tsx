@@ -1,6 +1,7 @@
 import type { PaymentEntry } from '@'
 import dayjs from 'dayjs'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { usePersonalization } from '@lifeforge/ui'
 
@@ -21,7 +22,7 @@ function BreakdownTable({
   entry: PaymentEntry
   calculations: CalculatedPayment
 }) {
-  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
+  const { t } = useModuleTranslation()
 
   const { language } = usePersonalization()
 

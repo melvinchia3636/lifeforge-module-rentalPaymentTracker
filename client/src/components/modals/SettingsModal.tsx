@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm, useWatch } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 import z from 'zod'
 
 import {
@@ -28,7 +28,7 @@ const schema = z.object({
 })
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
-  const { t } = useTranslation('apps.melvinchia3636--rental-payment-tracker')
+  const { t } = useModuleTranslation()
 
   const qc = useQueryClient()
 
