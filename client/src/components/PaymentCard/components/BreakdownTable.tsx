@@ -1,8 +1,8 @@
 import type { PaymentEntry } from '@'
 import dayjs from 'dayjs'
 import { Trans } from 'react-i18next'
-import { useModuleTranslation } from '@lifeforge/localization'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import { usePersonalization } from '@lifeforge/ui'
 
 import type { CalculatedPayment } from '@/utils/calculations'

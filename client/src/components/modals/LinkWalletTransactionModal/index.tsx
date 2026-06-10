@@ -105,8 +105,7 @@ function LinkWalletTransactionModal({
           <EmptyStateScreen
             icon="tabler:search"
             message={{
-              id: 'linkWalletQuery',
-              namespace: 'apps.melvinchia3636--rental-payment-tracker'
+              id: 'linkWalletQuery'
             }}
           />
         </Flex>
@@ -118,8 +117,7 @@ function LinkWalletTransactionModal({
                 <Flex centered flex="1">
                   <EmptyStateScreen
                     message={{
-                      id: 'noTransactionsFound',
-                      namespace: 'apps.melvinchia3636--rental-payment-tracker'
+                      id: 'noTransactionsFound'
                     }}
                   />
                 </Flex>

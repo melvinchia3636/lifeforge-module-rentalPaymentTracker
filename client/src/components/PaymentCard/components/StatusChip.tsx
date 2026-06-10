@@ -1,5 +1,4 @@
 import { useModuleTranslation } from '@lifeforge/localization'
-
 import { TAILWIND_PALETTE, TagChip, Text } from '@lifeforge/ui'
 
 function StatusChip({

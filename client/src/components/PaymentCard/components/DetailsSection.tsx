@@ -2,9 +2,9 @@ import type { PaymentEntry } from '@'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 import { useReactToPrint } from 'react-to-print'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import {
   Box,
   Button,
@@ -117,7 +117,6 @@ function DetailsSection({
                 <Button
                   flex="1"
                   icon="tabler:photo"
-                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -136,7 +135,6 @@ function DetailsSection({
                 <Button
                   flex="1"
                   icon="tabler:report-money"
-                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   variant="secondary"
                   onClick={() =>
                     handleViewImage(
@@ -157,7 +155,6 @@ function DetailsSection({
             icon="tabler:printer"
             loading={fontQuery.isLoading}
             mt="md"
-            namespace="apps.melvinchia3636--rental-payment-tracker"
             variant="primary"
             width="100%"
             onClick={reactToPrintFn}
@@ -169,7 +166,6 @@ function DetailsSection({
           display={{ base: 'flex', print: 'none' }}
           icon="tabler:chevron-up"
           mt="md"
-          namespace="apps.melvinchia3636--rental-payment-tracker"
           variant="plain"
           width="100%"
           onClick={() => setCollapsed(true)}

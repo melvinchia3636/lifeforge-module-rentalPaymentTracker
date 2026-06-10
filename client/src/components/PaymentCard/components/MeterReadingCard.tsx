@@ -1,6 +1,6 @@
 import type { PaymentEntry } from '@'
-import { useModuleTranslation } from '@lifeforge/localization'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import { Card, Flex, Icon, Text, surface } from '@lifeforge/ui'
 
 function MeterReadingCard({ entry }: { entry: PaymentEntry }) {

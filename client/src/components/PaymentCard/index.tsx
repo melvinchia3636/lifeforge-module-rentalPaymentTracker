@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import { Card, Flex, PrintArea, Text, usePersonalization } from '@lifeforge/ui'
 
 import type { PaymentEntry } from '../../index'

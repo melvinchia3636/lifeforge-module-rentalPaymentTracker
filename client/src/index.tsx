@@ -1,8 +1,8 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 
 import { type InferOutput, fetchAPI } from '@lifeforge/api'
+import { useModuleTranslation } from '@lifeforge/localization'
 import {
   Button,
   ContextMenuItem,
@@ -141,7 +141,6 @@ function RentalPaymentTracker() {
               <ContextMenuItem
                 icon="tabler:settings"
                 label="settings"
-                namespace="apps.melvinchia3636--rental-payment-tracker"
                 onClick={() => {
                   open(SettingsModal, {})
                 }}
@@ -156,8 +155,7 @@ function RentalPaymentTracker() {
             <EmptyStateScreen
               icon="tabler:receipt-off"
               message={{
-                id: 'payment',
-                namespace: 'apps.melvinchia3636--rental-payment-tracker'
+                id: 'payment'
               }}
             />
           ) : (
@@ -177,7 +175,6 @@ function RentalPaymentTracker() {
                 }
                 icon="tabler:cash-plus"
                 mb="lg"
-                namespace="apps.melvinchia3636--rental-payment-tracker"
                 title="Prepaid Amount"
               >
                 <Amount

@@ -2,10 +2,10 @@ import React from 'react'
 
 function TransactionListItem({ transaction }: { transaction: unknown }) {
   const transactionListItem = import.meta.glob(
-    '/../**/apps/lifeforge--wallet/client/src/pages/Transactions/components/TransactionList/components/TransactionItem.tsx',
+    '/../**/modules/lifeforge--wallet/client/src/pages/Transactions/components/TransactionList/components/TransactionItem.tsx',
     { eager: true }
   )[
-    '../apps/lifeforge--wallet/client/src/pages/Transactions/components/TransactionList/components/TransactionItem.tsx'
+    '../modules/lifeforge--wallet/client/src/pages/Transactions/components/TransactionList/components/TransactionItem.tsx'
   ]
 
   if (!transactionListItem || typeof transactionListItem !== 'object') {

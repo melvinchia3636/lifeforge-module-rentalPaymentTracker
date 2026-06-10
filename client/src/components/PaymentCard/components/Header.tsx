@@ -149,7 +149,6 @@ function Header({
                 <ContextMenuItem
                   icon="tabler:wallet"
                   label="Link Wallet Transaction"
-                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   onClick={() => {
                     open(LinkWalletTransactionModal, { entry })
                   }}
@@ -159,7 +158,6 @@ function Header({
                 <ContextMenuItem
                   icon="tabler:unlink"
                   label="Unlink Wallet Transaction"
-                  namespace="apps.melvinchia3636--rental-payment-tracker"
                   onClick={handleUnlinkWallet}
                 />
               )}
