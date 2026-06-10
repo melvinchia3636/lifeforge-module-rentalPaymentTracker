@@ -50,11 +50,8 @@ export default function ModifyPaymentEntryModal({
   }
 }) {
   const { t } = useModuleTranslation()
-
   const qc = useQueryClient()
-
   const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
-
   const entriesQuery = useQuery(forgeAPI.entries.list.queryOptions())
 
   const mutation = useMutation(

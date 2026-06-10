@@ -31,9 +31,7 @@ export type PaymentEntry = InferOutput<typeof forgeAPI.entries.getById>
 
 function RentalPaymentTracker() {
   const { t } = useModuleTranslation()
-
   const { open } = useModalStore()
-
   const [ready, setReady] = useState(false)
 
   const entriesQuery = useQuery(

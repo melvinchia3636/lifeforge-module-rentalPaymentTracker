@@ -29,9 +29,7 @@ const schema = z.object({
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
   const { t } = useModuleTranslation()
-
   const qc = useQueryClient()
-
   const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
 
   const walletAvailabilityQuery = useQuery(

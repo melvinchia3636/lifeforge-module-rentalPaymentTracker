@@ -38,11 +38,8 @@ function DetailsSection({
   containerRef: React.RefObject<HTMLDivElement | null>
 }) {
   const thisRef = useRef<HTMLDivElement>(null)
-
   const { height } = useDivSize(thisRef)
-
   const { open } = useModalStore()
-
   const { t } = useModuleTranslation()
 
   const fontQuery = useQuery(

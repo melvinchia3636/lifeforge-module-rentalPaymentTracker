@@ -27,7 +27,6 @@ function LinkWalletTransactionModal({
   onClose: () => void
 }) {
   const queryClient = useQueryClient()
-
   const [searchQuery, setSearchQuery] = useState('')
 
   const [selectedTransactionId, setSelectedTransactionId] = useState<{

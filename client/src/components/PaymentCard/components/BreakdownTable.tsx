@@ -23,7 +23,6 @@ function BreakdownTable({
   calculations: CalculatedPayment
 }) {
   const { t } = useModuleTranslation()
-
   const { language } = usePersonalization()
 
   return (

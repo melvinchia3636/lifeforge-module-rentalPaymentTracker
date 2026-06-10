@@ -33,9 +33,7 @@ function Header({
   setBreakdownCollapsed: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const queryClient = useQueryClient()
-
   const { open } = useModalStore()
-
   const { language } = usePersonalization()
 
   const { totalPayable, electricityBill, amountPaid } = calculations

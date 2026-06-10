@@ -16,11 +16,8 @@ interface PaymentCardProps {
 
 export default function PaymentCard({ entry, calculations }: PaymentCardProps) {
   const { t } = useModuleTranslation()
-
   const ref = useRef<HTMLDivElement>(null)
-
   const { language } = usePersonalization()
-
   const [breakdownCollapsed, setBreakdownCollapsed] = useState(true)
 
   return (
