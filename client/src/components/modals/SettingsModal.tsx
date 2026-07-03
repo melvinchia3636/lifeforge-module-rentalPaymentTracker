@@ -40,28 +40,8 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
       .queryOptions()
   )
 
-  const walletTemplatesQuery = useQuery<{
-    expenses: {
-      id: string
-      name: string
-      category: string
-    }[]
-  }>(
-    forgeAPI.untyped('/wallet/templates/list').queryOptions({
-      enabled: walletAvailabilityQuery.data === true
-    })
-  )
-
-  const walletCategoriesQuery = useQuery<
-    {
-      id: string
-      name: string
-      color: string
-      icon: string
-      type: 'income' | 'expenses'
-    }[]
-  >(
-    forgeAPI.untyped('/wallet/categories/list').queryOptions({
+  const walletTemplatesQuery = useQuery(
+    forgeAPI.wallet.getWalletTemplates.queryOptions({
       enabled: walletAvailabilityQuery.data === true
     })
   )
@@ -70,7 +50,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
     forgeAPI.settings.update.mutationOptions({
       onSuccess: () => {
         qc.invalidateQueries({
-          queryKey: ['melvinchia3636--rentalPaymentTracker', 'settings']
+          queryKey: forgeAPI.settings.key
         })
         onClose()
       }
@@ -94,20 +74,15 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
     return null
   }
 
-  const walletOptions =
-    walletCategoriesQuery.data && walletTemplatesQuery.data
-      ? walletTemplatesQuery.data.expenses.map(template => ({
-          label: `${template.name} [${template.category}]`,
-          value: template.id,
-          color: walletCategoriesQuery.data.find(
-            category => category.id === template.category
-          )?.color,
-          icon: walletCategoriesQuery.data.find(
-            category => category.id === template.category
-          )?.icon,
-          text: template.name
-        }))
-      : []
+  const walletOptions = walletTemplatesQuery.data
+    ? walletTemplatesQuery.data.map(template => ({
+        label: `${template.name} [${template.category}]`,
+        value: template.id,
+        color: template.category.color,
+        icon: template.category.icon,
+        text: template.name
+      }))
+    : []
 
   return (
     <FormModal
@@ -179,13 +154,13 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           <ListboxField
             required
             control={form.control}
-            disabled={walletTemplatesQuery.data?.expenses.length === 0}
+            disabled={walletTemplatesQuery.data?.length === 0}
             icon="tabler:template"
             label="Wallet Template"
             name="wallet_template_id"
             options={walletOptions}
           />
-          {walletTemplatesQuery.data?.expenses.length === 0 && (
+          {walletTemplatesQuery.data?.length === 0 && (
             <Tooltip icon="tabler:info-circle" id="wallet-templates-disabled">
               {t('empty.walletTemplates.description')}
             </Tooltip>

@@ -12,6 +12,7 @@ import {
   Scrollbar,
   SearchInput,
   WithQuery,
+  surface,
   toast
 } from '@lifeforge/ui'
 
@@ -56,9 +57,8 @@ function LinkWalletTransactionModal({
       onSuccess: () => {
         toast.success('Transaction linked successfully')
         queryClient.invalidateQueries({
-          queryKey: ['melvinchia3636--rentalPaymentTracker']
+          queryKey: forgeAPI.key
         })
-        queryClient.invalidateQueries({ queryKey: ['wallet'] })
         onClose()
       },
       onError: (error: Error) => {
@@ -94,9 +94,9 @@ function LinkWalletTransactionModal({
         onClose={onClose}
       />
       <SearchInput
-        bg="bg-100"
+        bg={surface.lightInteractive}
         debounceMs={300}
-        searchTarget="transactions"
+        searchTarget="transaction"
         value={searchQuery}
         onChange={setSearchQuery}
       />

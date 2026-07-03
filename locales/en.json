@@ -2,7 +2,8 @@
   "title": "Rental Payment Tracker",
   "description": "Track rental payments, electricity usage, and prepayments",
   "items": {
-    "payment": "Payment Entry"
+    "payment": "Payment Entry",
+    "transaction": "Transaction"
   },
   "modals": {
     "payment": {

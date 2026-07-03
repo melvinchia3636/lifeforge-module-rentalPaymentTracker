@@ -115,7 +115,8 @@ export const create = forge
 
       const settingsData = settings[0]
 
-      const walletModuleAvailable = checkModulesAvailability('wallet')
+      const walletModuleAvailable =
+        await checkModulesAvailability('lifeforge--wallet')
 
       if (
         !body.auto_create_wallet_transaction ||
@@ -127,7 +128,7 @@ export const create = forge
       }
 
       const walletTemplate = await pb.instance
-        .collection('transaction_templates')
+        .collection('wallet__transaction_templates')
         .getOne(settingsData.wallet_template_id)
         .catch(() => null)
 
@@ -147,18 +148,20 @@ export const create = forge
           type: 'income_expenses'
         })
 
-      await pb.instance.collection('transactions_income_expenses').create({
-        base_transaction: baseTransactionEntry.id,
-        type: 'expenses',
-        particulars: `Rental Payment - ${dayjs()
-          .month(body.month - 1)
-          .format('MMMM')} ${body.year}`,
-        asset: walletTemplate.asset,
-        category: walletTemplate.category,
-        ledgers: walletTemplate.ledgers,
-        location_coords: walletTemplate.location_coords,
-        location_name: walletTemplate.location_name
-      })
+      await pb.instance
+        .collection('wallet__transactions_income_expenses')
+        .create({
+          base_transaction: baseTransactionEntry.id,
+          type: 'expenses',
+          particulars: `Rental Payment - ${dayjs()
+            .month(body.month - 1)
+            .format('MMMM')} ${body.year}`,
+          asset: walletTemplate.asset,
+          category: walletTemplate.category,
+          ledgers: walletTemplate.ledgers,
+          location_coords: walletTemplate.location_coords,
+          location_name: walletTemplate.location_name
+        })
 
       await pb.update
         .collection('entries')
@@ -418,7 +421,8 @@ export const cleanupOrphanedWalletLinks = forge
       },
       response
     }) => {
-      const walletModuleAvailable = checkModulesAvailability('wallet')
+      const walletModuleAvailable =
+        await checkModulesAvailability('lifeforge--wallet')
 
       if (!walletModuleAvailable) {
         return response.ok({ cleanedCount: 0, entries: [] })

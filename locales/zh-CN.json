@@ -2,7 +2,8 @@
   "title": "租金支付追踪器",
   "description": "跟踪租金支付、电费使用和预付款",
   "items": {
-    "payment": "支付记录"
+    "payment": "支付记录",
+    "transaction": "交易"
   },
   "modals": {
     "payment": {

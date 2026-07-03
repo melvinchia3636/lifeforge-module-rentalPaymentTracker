@@ -54,7 +54,7 @@ function Header({
       .mutationOptions({
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: ['melvinchia3636--rentalPaymentTracker']
+            queryKey: forgeAPI.key
           })
         },
         onError: () => {
@@ -67,9 +67,8 @@ function Header({
     forgeAPI.entries.unlinkWalletTransaction.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['melvinchia3636--rentalPaymentTracker']
+          queryKey: forgeAPI.key
         })
-        queryClient.invalidateQueries({ queryKey: ['wallet'] })
         toast.success('Wallet transaction unlinked successfully')
       },
       onError: () => {

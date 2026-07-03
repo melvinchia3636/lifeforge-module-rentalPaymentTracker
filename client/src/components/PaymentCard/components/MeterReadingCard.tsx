@@ -9,7 +9,7 @@ function MeterReadingCard({ entry }: { entry: PaymentEntry }) {
   return (
     <Card bg={{ ...surface.light, print: 'bg-100' }}>
       <Flex align="center" gap="sm" mb="sm">
-        <Icon color="muted" icon="tabler:gauge" size="1.25em" />
+        <Icon color="muted" icon="tabler:gauge" />
         <Text
           color={{ base: 'bg-500', print: 'zinc-500' }}
           size={{ base: 'sm', print: 'xs' }}

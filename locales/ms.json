@@ -2,7 +2,8 @@
   "title": "Penjejak Pembayaran Sewa",
   "description": "Jejaki pembayaran sewa, penggunaan elektrik, dan prabayar",
   "items": {
-    "payment": "Entri Pembayaran"
+    "payment": "Entri Pembayaran",
+    "transaction": "Transaksi"
   },
   "modals": {
     "payment": {

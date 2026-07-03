@@ -18,6 +18,7 @@ import {
   createDefaultValues,
   fileValueSchema,
   getFormFileFieldInitialData,
+  surface,
   toast
 } from '@lifeforge/ui'
 
@@ -63,9 +64,8 @@ export default function ModifyPaymentEntryModal({
     ).mutationOptions({
       onSuccess: () => {
         qc.invalidateQueries({
-          queryKey: ['melvinchia3636--rentalPaymentTracker']
+          queryKey: forgeAPI.key
         })
-        qc.invalidateQueries({ queryKey: ['wallet'] })
       },
       onError: error => {
         toast.error('Failed to submit payment entry.')
@@ -202,7 +202,14 @@ export default function ModifyPaymentEntryModal({
         label="Current Meter Reading"
         name="current_meter_reading"
       />
-      <Flex align="center" bg="bg-100" gap="xs" justify="between" p="md" r="md">
+      <Flex
+        align="center"
+        bg={surface.light}
+        gap="xs"
+        justify="between"
+        p="md"
+        r="md"
+      >
         <Flex direction="column" width="100%">
           <Text>{t('paymentCard.totalPayable')}</Text>
           <Text color="custom-500" size="xl" weight="bold">
