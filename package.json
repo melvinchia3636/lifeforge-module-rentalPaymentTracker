@@ -2,6 +2,7 @@
   "name": "@lifeforge/melvinchia3636--rental-payment-tracker",
   "displayName": "Rental Payment Tracker",
   "version": "0.0.5",
+  "type": "module",
   "description": "Track rental payments, electricity usage, and utility bills with meter reading records, with link to your wallet module.",
   "author": "melvinchia3636 <melvinchia623600@gmail.com>",
   "repository": {
@@ -9,9 +10,12 @@
     "url": "https://github.com/melvinchia3636/lifeforge-module-rentalPaymentTracker"
   },
   "scripts": {
-    "types": "cd client && bun tsc",
-    "build:client": "cd client && bun run vite build",
-    "build:server": "bun build ./server/index.ts --outdir ./server/dist --target bun --external @lifeforge/server-utils --external zod"
+    "typecheck": "pnpm run typecheck:client && pnpm run typecheck:server",
+    "typecheck:client": "cd client && tsc",
+    "typecheck:server": "cd server && tsc",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "build:client": "cd client && vite build",
+    "build:server": "cd server && vite build"
   },
   "dependencies": {
     "react-to-print": "^3.2.0",
@@ -27,6 +31,7 @@
   "peerDependencies": {
     "@lifeforge/api": "workspace:*",
     "@lifeforge/server-utils": "workspace:*",
+    "@lifeforge/pocketbase": "workspace:*",
     "@lifeforge/localization": "workspace:*",
     "@lifeforge/ui": "workspace:*",
     "@lifeforge/federation": "workspace:*",

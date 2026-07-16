@@ -40,8 +40,6 @@ function RentalPaymentTracker() {
     })
   )
 
-  console.log(entriesQuery.data)
-
   const settingsQuery = useQuery(forgeAPI.settings.get.queryOptions())
 
   // Clean up orphaned wallet links on mount
@@ -69,7 +67,7 @@ function RentalPaymentTracker() {
       .map(entry => ({ entryId: entry.id, walletId: entry.wallet_entry_id }))
   }, [entriesQuery.data])
 
-  // Fetch wallet transactions for entries that have wallet_entry_id
+  // TODO: Fetch wallet transactions for entries that have wallet_entry_id
   const walletQueries = useQueries({
     queries: walletEntryIds.map(({ entryId, walletId }) => ({
       queryKey: ['wallet', 'transaction', walletId],
