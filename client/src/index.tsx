@@ -5,6 +5,7 @@ import { type InferOutput, fetchAPI } from '@lifeforge/api'
 import { useModuleTranslation } from '@lifeforge/localization'
 import {
   Button,
+  ContextMenu,
   ContextMenuItem,
   EmptyStateScreen,
   FAB,
@@ -117,25 +118,23 @@ function RentalPaymentTracker() {
   return (
     <>
       <ModuleHeader
-        actionButton={
-          <Button
-            display={{ base: 'none', md: 'flex' }}
-            icon="tabler:plus"
-            tProps={{
-              item: t('items.payment')
-            }}
-            onClick={() => {
-              open(ModifyPaymentEntryModal, {
-                openType: 'create'
-              })
-            }}
-          >
-            new
-          </Button>
-        }
-        contextMenuProps={{
-          children: (
-            <>
+        trailing={
+          <>
+            <Button
+              display={{ base: 'none', md: 'flex' }}
+              icon="tabler:plus"
+              tProps={{
+                item: t('items.payment')
+              }}
+              onClick={() => {
+                open(ModifyPaymentEntryModal, {
+                  openType: 'create'
+                })
+              }}
+            >
+              new
+            </Button>
+            <ContextMenu>
               <ContextMenuItem
                 icon="tabler:settings"
                 label="settings"
@@ -143,9 +142,9 @@ function RentalPaymentTracker() {
                   open(SettingsModal, {})
                 }}
               />
-            </>
-          )
-        }}
+            </ContextMenu>
+          </>
+        }
       />
       <WithQuery query={entriesQuery}>
         {entries =>

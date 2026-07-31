@@ -139,9 +139,13 @@ function Header({
         <Flex display={{ print: 'none' }}>
           {!breakdownCollapsed && (
             <ContextMenu
-              classNames={{
-                wrapper: 'print:hidden',
-                menu: 'w-64'
+              componentProps={{
+                menu: {
+                  width: '16rem'
+                }
+              }}
+              display={{
+                print: 'none'
               }}
             >
               {walletAvailabilityQuery.data && !entry.wallet_entry_id && (

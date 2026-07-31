@@ -34,7 +34,7 @@ const schema = z.object({
   rental_fee: z.number().nonnegative(),
   amount_paid: z.number().nonnegative(),
   auto_create_wallet_transaction: z.boolean().optional(),
-  wallet_entry_id: z.string().optional().catch(''),
+  wallet_entry_id: z.string(),
   electricity_used: z.number().optional(),
   meter_reading_image: fileValueSchema.optional(),
   bank_statement: fileValueSchema.optional()
