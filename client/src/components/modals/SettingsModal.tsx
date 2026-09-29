@@ -9,9 +9,9 @@ import {
   CurrencyField,
   Flex,
   FormModal,
+  IconTooltip,
   ListboxField,
   NumberField,
-  Tooltip,
   createDefaultValues
 } from '@lifeforge/ui'
 
@@ -144,9 +144,9 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           name="link_with_wallet"
         />
         {!walletAvailabilityQuery.data && (
-          <Tooltip icon="tabler:info-circle" id="wallet-module-disabled">
+          <IconTooltip icon="tabler:info-circle" id="wallet-module-disabled">
             {t('empty.walletModule.description')}
-          </Tooltip>
+          </IconTooltip>
         )}
       </Flex>
       {linkWithWallet && (
@@ -161,9 +161,12 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
             options={walletOptions}
           />
           {walletTemplatesQuery.data?.length === 0 && (
-            <Tooltip icon="tabler:info-circle" id="wallet-templates-disabled">
+            <IconTooltip
+              icon="tabler:info-circle"
+              id="wallet-templates-disabled"
+            >
               {t('empty.walletTemplates.description')}
-            </Tooltip>
+            </IconTooltip>
           )}
         </Flex>
       )}

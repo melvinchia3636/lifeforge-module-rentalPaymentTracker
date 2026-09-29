@@ -10,10 +10,10 @@ import {
   FileField,
   Flex,
   FormModal,
+  IconTooltip,
   ListboxField,
   NumberField,
   Text,
-  Tooltip,
   convertFormFileFieldData,
   createDefaultValues,
   fileValueSchema,
@@ -237,11 +237,11 @@ export default function ModifyPaymentEntryModal({
           name="amount_paid"
         />
         {openType === 'update' && !!initialData?.wallet_entry_id && (
-          <Tooltip icon="tabler:link" id="amount-paid-disabled">
+          <IconTooltip icon="tabler:link" id="amount-paid-disabled">
             <Box maxWidth="20em">
               {t('empty.transactionLinked.description')}
             </Box>
-          </Tooltip>
+          </IconTooltip>
         )}
       </Flex>
       <FileField
