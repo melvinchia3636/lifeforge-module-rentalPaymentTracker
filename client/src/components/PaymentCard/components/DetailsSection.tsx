@@ -121,9 +121,7 @@ function DetailsSection({
                   onClick={() =>
                     handleViewImage(
                       forgeAPI.getMedia({
-                        collectionId: entry.collectionId,
-                        fieldId: entry.meter_reading_image,
-                        recordId: entry.id
+                        key: entry.meter_reading_image
                       })
                     )
                   }
@@ -139,9 +137,7 @@ function DetailsSection({
                   onClick={() =>
                     handleViewImage(
                       forgeAPI.getMedia({
-                        collectionId: entry.collectionId,
-                        fieldId: entry.bank_statement,
-                        recordId: entry.id
+                        key: entry.bank_statement
                       })
                     )
                   }

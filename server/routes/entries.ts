@@ -1,63 +1,82 @@
+import { and, desc, eq, ne } from 'drizzle-orm'
+import { createSelectSchema } from 'drizzle-orm/zod'
 import dayjs from 'dayjs'
-import fs from 'fs'
 import z from 'zod'
 
 import forge from '../forge'
-import schemas from '../schema'
+import { rentalPaymentEntries } from '../schema.drizzle'
+import {
+  getWalletTemplate,
+  getWalletTransaction,
+  createWalletTransaction,
+  updateWalletTransactionSchedule
+} from '../utils/walletLink'
+
+const entryDto = createSelectSchema(rentalPaymentEntries)
+
+const entryFields = {
+  month: z.number(),
+  year: z.number(),
+  previous_meter_reading: z.number(),
+  current_meter_reading: z.number(),
+  electricity_used: z.number(),
+  electricity_rate: z.number(),
+  utility_bill: z.number(),
+  rental_fee: z.number(),
+  amount_paid: z.number(),
+  wallet_entry_id: z.string().optional()
+}
+
+const createInputDto = z.object({
+  ...entryFields,
+  auto_create_wallet_transaction: z.boolean().optional()
+})
+
+const updateInputDto = z.object(entryFields).partial()
+
+function monthLabel(year: number, month: number): string {
+  return `${dayjs().month(month - 1).format('MMMM')} ${year}`
+}
 
 export const list = forge
   .query({
     description: 'List all payment entries',
     output: {
-      OK: z.array(schemas.entries)
+      OK: z.array(entryDto)
     }
   })
-  .callback(async ({ pb, response }) =>
-    response.ok(
-      await pb.getFullList
-        .collection('entries')
-        .sort(['-year', '-month'])
-        .execute()
-    )
-  )
+  .callback(async ({ db, response }) => {
+    const rows = await db
+      .select()
+      .from(rentalPaymentEntries)
+      .orderBy(desc(rentalPaymentEntries.year), desc(rentalPaymentEntries.month))
+
+    return response.ok(rows)
+  })
 
 export const getById = forge
   .query({
     description: 'Get entry by ID',
     input: {
       query: z.object({
-        id: z.string()
+        id: forge.existsIn(z.string(), rentalPaymentEntries)
       })
     },
-    existenceCheck: {
-      query: { id: 'entries' }
-    },
     output: {
-      OK: schemas.entries,
-      NOT_FOUND: true
+      OK: entryDto
     }
   })
-  .callback(async ({ pb, query: { id }, response }) =>
-    response.ok(await pb.getOne.collection('entries').id(id).execute())
-  )
+  .callback(async ({ db, query: { id }, response }) => {
+    const row = (await db.query.entries.findFirst({ where: { id } }))!
+
+    return response.ok(row)
+  })
 
 export const create = forge
   .mutation({
     description: 'Create a new payment entry',
     input: {
-      body: schemas.entries
-        .omit({
-          created: true,
-          updated: true,
-          meter_reading_image: true,
-          bank_statement: true,
-          id: true,
-          collectionId: true,
-          collectionName: true
-        })
-        .extend({
-          auto_create_wallet_transaction: z.boolean().optional()
-        })
+      body: createInputDto
     },
     media: {
       meter_reading_image: {
@@ -68,111 +87,106 @@ export const create = forge
       }
     },
     output: {
-      CREATED: schemas.entries
+      CREATED: entryDto
     }
   })
   .callback(
     async ({
-      pb,
+      db,
       body,
       media: { meter_reading_image: rawMeter, bank_statement: rawStatement },
       core: {
         media: { convertPDFToImage },
+        storage,
         validation: { checkModulesAvailability }
       },
       response
     }) => {
-      const meterReadingImage =
-        rawMeter && typeof rawMeter !== 'string'
-          ? new File([fs.readFileSync(rawMeter.path)], 'meter.jpg', {
-              type: rawMeter.mimetype
-            })
-          : undefined
-
-      const bankStatement =
-        rawStatement && typeof rawStatement !== 'string'
-          ? rawStatement.originalname.endsWith('.pdf')
-            ? await convertPDFToImage(rawStatement.path)
-            : new File([fs.readFileSync(rawStatement.path)], 'statement.jpg', {
-                type: rawStatement.mimetype
-              })
-          : undefined
-
-      const baseEntry = await pb.create
-        .collection('entries')
-        .data({
-          ...body,
-          meter_reading_image: meterReadingImage,
-          bank_statement: bankStatement
-        })
-        .execute()
-
-      const settings = await pb.getFullList.collection('settings').execute()
-
-      if (!settings.length) {
-        return response.created(baseEntry)
+      const values: typeof rentalPaymentEntries.$inferInsert = {
+        month: body.month,
+        year: body.year,
+        previous_meter_reading: body.previous_meter_reading,
+        current_meter_reading: body.current_meter_reading,
+        electricity_used: body.electricity_used,
+        electricity_rate: body.electricity_rate,
+        utility_bill: body.utility_bill,
+        rental_fee: body.rental_fee,
+        amount_paid: body.amount_paid,
+        wallet_entry_id: body.wallet_entry_id ?? ''
       }
 
-      const settingsData = settings[0]
+      if (rawMeter && typeof rawMeter !== 'string') {
+        const ref = await storage.save({ file: rawMeter })
 
-      const walletModuleAvailable =
-        await checkModulesAvailability('lifeforge--wallet')
+        values.meter_reading_image = ref?.key ?? ''
+      }
+
+      if (rawStatement && typeof rawStatement !== 'string') {
+        if (rawStatement.originalName.endsWith('.pdf')) {
+          const image = await convertPDFToImage(rawStatement.path)
+
+          if (image) {
+            const ref = await storage.save({
+              file: {
+                buffer: Buffer.from(await image.arrayBuffer()),
+                originalName: image.name,
+                mimeType: image.type
+              }
+            })
+
+            values.bank_statement = ref?.key ?? ''
+          }
+        } else {
+          const ref = await storage.save({ file: rawStatement })
+
+          values.bank_statement = ref?.key ?? ''
+        }
+      }
+
+      const [baseEntry] = await db
+        .insert(rentalPaymentEntries)
+        .values(values)
+        .returning()
+
+      const settings = await db.query.settings.findFirst()
 
       if (
+        !settings ||
         !body.auto_create_wallet_transaction ||
-        !settingsData.link_with_wallet ||
-        !settingsData.wallet_template_id ||
-        !walletModuleAvailable
+        !settings.link_with_wallet ||
+        !settings.wallet_template_id
       ) {
         return response.created(baseEntry)
       }
 
-      const walletTemplate = await pb.instance
-        .collection('wallet__transaction_templates')
-        .getOne(settingsData.wallet_template_id)
-        .catch(() => null)
+      const walletAvailable = await checkModulesAvailability(
+        'lifeforge--wallet'
+      )
 
-      if (!walletTemplate) {
+      if (!walletAvailable) {
         return response.created(baseEntry)
       }
 
-      const baseTransactionEntry = await pb.instance
-        .collection('wallet__transactions')
-        .create({
-          date: dayjs()
-            .year(body.year)
-            .month(body.month - 1)
-            .date(1)
-            .toDate(),
-          amount: body.amount_paid,
-          type: 'income_expenses'
-        })
+      const template = await getWalletTemplate(db, settings.wallet_template_id)
 
-      await pb.instance
-        .collection('wallet__transactions_income_expenses')
-        .create({
-          base_transaction: baseTransactionEntry.id,
-          type: 'expenses',
-          particulars: `Rental Payment - ${dayjs()
-            .month(body.month - 1)
-            .format('MMMM')} ${body.year}`,
-          asset: walletTemplate.asset,
-          category: walletTemplate.category,
-          ledgers: walletTemplate.ledgers,
-          location_coords: walletTemplate.location_coords,
-          location_name: walletTemplate.location_name
-        })
+      if (!template) {
+        return response.created(baseEntry)
+      }
 
-      await pb.update
-        .collection('entries')
-        .id(baseEntry.id)
-        .data({
-          wallet_entry_id: baseTransactionEntry.id,
-          amount_paid: 0
-        })
-        .execute()
+      const walletId = await createWalletTransaction(db, {
+        amount: body.amount_paid,
+        date: new Date(body.year, body.month - 1, 1),
+        particulars: `Rental Payment - ${monthLabel(body.year, body.month)}`,
+        template
+      })
 
-      return response.created(baseEntry)
+      const [linkedEntry] = await db
+        .update(rentalPaymentEntries)
+        .set({ wallet_entry_id: walletId, amount_paid: 0 })
+        .where(eq(rentalPaymentEntries.id, baseEntry.id))
+        .returning()
+
+      return response.created(linkedEntry)
     }
   )
 
@@ -181,17 +195,9 @@ export const update = forge
     description: 'Update an existing entry',
     input: {
       query: z.object({
-        id: z.string()
+        id: forge.existsIn(z.string(), rentalPaymentEntries)
       }),
-      body: schemas.entries.partial().omit({
-        created: true,
-        updated: true,
-        meter_reading_image: true,
-        bank_statement: true,
-        id: true,
-        collectionId: true,
-        collectionName: true
-      })
+      body: updateInputDto
     },
     media: {
       meter_reading_image: {
@@ -201,60 +207,68 @@ export const update = forge
         optional: true
       }
     },
-    existenceCheck: {
-      query: { id: 'entries' }
-    },
     output: {
-      OK: schemas.entries,
-      NOT_FOUND: true
+      OK: entryDto
     }
   })
   .callback(
     async ({
-      pb,
+      db,
       query: { id },
       body,
       media: { meter_reading_image: rawMeter, bank_statement: rawStatement },
       core: {
-        media: { convertPDFToImage }
+        media: { convertPDFToImage },
+        storage
       },
       response
     }) => {
-      const currentEntry = await pb.getOne
-        .collection('entries')
-        .id(id)
-        .execute()
+      const currentEntry = (await db.query.entries.findFirst({
+        where: { id }
+      }))!
 
-      const meterReadingImage =
-        rawMeter && typeof rawMeter !== 'string'
-          ? new File([fs.readFileSync(rawMeter.path)], 'meter.jpg', {
-              type: rawMeter.mimetype
+      const set: Partial<typeof rentalPaymentEntries.$inferInsert> = {
+        ...body,
+        updated: new Date()
+      }
+
+      if (rawMeter === 'removed') {
+        set.meter_reading_image = ''
+      } else if (rawMeter && typeof rawMeter !== 'string') {
+        const ref = await storage.save({ file: rawMeter })
+
+        set.meter_reading_image = ref?.key ?? ''
+      }
+
+      if (rawStatement === 'removed') {
+        set.bank_statement = ''
+      } else if (rawStatement && typeof rawStatement !== 'string') {
+        if (rawStatement.originalName.endsWith('.pdf')) {
+          const image = await convertPDFToImage(rawStatement.path)
+
+          if (image) {
+            const ref = await storage.save({
+              file: {
+                buffer: Buffer.from(await image.arrayBuffer()),
+                originalName: image.name,
+                mimeType: image.type
+              }
             })
-          : undefined
 
-      const bankStatement =
-        rawStatement && typeof rawStatement !== 'string'
-          ? rawStatement.originalname.endsWith('.pdf')
-            ? await convertPDFToImage(rawStatement.path)
-            : new File([fs.readFileSync(rawStatement.path)], 'statement.jpg', {
-                type: rawStatement.mimetype
-              })
-          : undefined
+            set.bank_statement = ref?.key ?? ''
+          }
+        } else {
+          const ref = await storage.save({ file: rawStatement })
 
-      const updatedEntry = await pb.update
-        .collection('entries')
-        .id(id)
-        .data({
-          ...body,
-          ...(rawMeter !== 'keep' && {
-            meter_reading_image:
-              rawMeter === 'removed' ? null : meterReadingImage
-          }),
-          ...(rawStatement !== 'keep' && {
-            bank_statement: rawStatement === 'removed' ? null : bankStatement
-          })
-        })
-        .execute()
+          set.bank_statement = ref?.key ?? ''
+        }
+      }
+
+      const [updatedEntry] = await db
+        .update(rentalPaymentEntries)
+        .set(set)
+        .where(eq(rentalPaymentEntries.id, id))
+        .returning()
 
       if (currentEntry.wallet_entry_id && (body.year || body.month)) {
         const newYear = body.year ?? currentEntry.year
@@ -263,32 +277,15 @@ export const update = forge
 
         if (newYear !== currentEntry.year || newMonth !== currentEntry.month) {
           try {
-            await pb.instance
-              .collection('wallet__transactions')
-              .update(currentEntry.wallet_entry_id, {
-                date: dayjs()
-                  .year(newYear)
-                  .month(newMonth - 1)
-                  .date(1)
-                  .toDate()
-              })
-
-            const incomeExpense = await pb.instance
-              .collection('wallet__transactions_income_expenses')
-              .getFirstListItem(
-                `base_transaction = "${currentEntry.wallet_entry_id}"`
-              )
-
-            if (incomeExpense) {
-              await pb.instance
-                .collection('wallet__transactions_income_expenses')
-                .update(incomeExpense.id, {
-                  particulars: `Rental Payment - ${dayjs()
-                    .month(newMonth - 1)
-                    .format('MMMM')} ${newYear}`
-                })
-            }
-          } catch {}
+            await updateWalletTransactionSchedule(
+              db,
+              currentEntry.wallet_entry_id,
+              new Date(newYear, newMonth - 1, 1),
+              `Rental Payment - ${monthLabel(newYear, newMonth)}`
+            )
+          } catch {
+            // Wallet module unavailable or transaction missing — ignore.
+          }
         }
       }
 
@@ -301,105 +298,100 @@ export const linkWalletTransaction = forge
     description: 'Link a wallet transaction to a rental payment entry',
     input: {
       body: z.object({
-        entryId: z.string(),
+        entryId: forge.existsIn(z.string(), rentalPaymentEntries),
         transactionId: z.string()
       })
     },
-    existenceCheck: {
-      body: {
-        entryId: 'entries'
-      }
-    },
     output: {
-      OK: schemas.entries,
-      CONFLICT: true,
-      BAD_REQUEST: z.string(),
-      NOT_FOUND: true
+      OK: entryDto
     }
   })
-  .callback(async ({ pb, body: { entryId, transactionId }, response }) => {
-    const walletTransaction = await pb.instance
-      .collection('wallet__transactions')
-      .getOne(transactionId)
-      .catch(() => null)
+  .callback(
+    async ({
+      db,
+      body: { entryId, transactionId },
+      core: {
+        validation: { checkModulesAvailability }
+      },
+      response
+    }) => {
+      const walletAvailable = await checkModulesAvailability(
+        'lifeforge--wallet'
+      )
 
-    if (!walletTransaction) {
-      return response.badRequest('Wallet transaction not found')
+      if (!walletAvailable) {
+        return response.badRequest('Wallet module is not available')
+      }
+
+      const walletTransaction = await getWalletTransaction(db, transactionId)
+
+      if (!walletTransaction) {
+        return response.badRequest('Wallet transaction not found')
+      }
+
+      const conflictingEntries = await db
+        .select({ id: rentalPaymentEntries.id })
+        .from(rentalPaymentEntries)
+        .where(
+          and(
+            eq(rentalPaymentEntries.wallet_entry_id, transactionId),
+            ne(rentalPaymentEntries.id, entryId)
+          )
+        )
+
+      if (conflictingEntries.length > 0) {
+        return response.conflict()
+      }
+
+      const [updated] = await db
+        .update(rentalPaymentEntries)
+        .set({ wallet_entry_id: transactionId, amount_paid: 0, updated: new Date() })
+        .where(eq(rentalPaymentEntries.id, entryId))
+        .returning()
+
+      return response.ok(updated)
     }
-
-    const existingEntries = await pb.getFullList
-      .collection('entries')
-      .filter([
-        {
-          field: 'wallet_entry_id',
-          operator: '=',
-          value: transactionId
-        },
-        {
-          field: 'id',
-          operator: '!=',
-          value: entryId
-        }
-      ])
-      .execute()
-
-    if (existingEntries.length > 0) {
-      return response.conflict()
-    }
-
-    return response.ok(
-      await pb.update
-        .collection('entries')
-        .id(entryId)
-        .data({
-          wallet_entry_id: transactionId,
-          amount_paid: 0
-        })
-        .execute()
-    )
-  })
+  )
 
 export const unlinkWalletTransaction = forge
   .mutation({
     description: 'Unlink a wallet transaction from a rental payment entry',
     input: {
       body: z.object({
-        entryId: z.string()
+        entryId: forge.existsIn(z.string(), rentalPaymentEntries)
       })
     },
-    existenceCheck: {
-      body: { entryId: 'entries' }
-    },
     output: {
-      OK: schemas.entries,
-      BAD_REQUEST: z.string(),
-      NOT_FOUND: true
+      OK: entryDto
     }
   })
-  .callback(async ({ pb, body: { entryId }, response }) => {
-    const entry = await pb.getOne.collection('entries').id(entryId).execute()
+  .callback(async ({ db, body: { entryId }, response }) => {
+    const entry = (await db.query.entries.findFirst({
+      where: { id: entryId }
+    }))!
 
     if (!entry.wallet_entry_id) {
       return response.badRequest('No wallet transaction linked to this entry')
     }
 
-    const walletTransaction = await pb.instance
-      .collection('wallet__transactions')
-      .getOne(entry.wallet_entry_id)
-      .catch(() => null)
+    const walletTransaction = await getWalletTransaction(
+      db,
+      entry.wallet_entry_id
+    ).catch(() => null)
 
     const amountToRestore = walletTransaction?.amount ?? 0
 
-    return response.ok(
-      await pb.update
-        .collection('entries')
-        .id(entryId)
-        .data({
-          wallet_entry_id: '',
-          amount_paid: amountToRestore
-        })
-        .execute()
-    )
+    const [updated] = await db
+      .update(rentalPaymentEntries)
+      .set({
+        wallet_entry_id: '',
+        amount_paid: amountToRestore,
+        updated: new Date()
+      })
+      .where(eq(rentalPaymentEntries.id, entryId))
+      .returning()
+
+    return response.ok(updated)
   })
 
 export const cleanupOrphanedWalletLinks = forge
@@ -415,39 +407,38 @@ export const cleanupOrphanedWalletLinks = forge
   })
   .callback(
     async ({
-      pb,
+      db,
       core: {
         validation: { checkModulesAvailability }
       },
       response
     }) => {
-      const walletModuleAvailable =
-        await checkModulesAvailability('lifeforge--wallet')
+      const walletAvailable = await checkModulesAvailability(
+        'lifeforge--wallet'
+      )
 
-      if (!walletModuleAvailable) {
+      if (!walletAvailable) {
         return response.ok({ cleanedCount: 0, entries: [] })
       }
 
-      const entriesWithWallet = await pb.getFullList
-        .collection('entries')
-        .filter([{ field: 'wallet_entry_id', operator: '!=', value: '' }])
-        .execute()
+      const entriesWithWallet = await db
+        .select()
+        .from(rentalPaymentEntries)
+        .where(ne(rentalPaymentEntries.wallet_entry_id, ''))
 
       const cleanedEntries: string[] = []
 
       for (const entry of entriesWithWallet) {
-        try {
-          await pb.instance
-            .collection('wallet__transactions')
-            .getOne(entry.wallet_entry_id)
-        } catch {
-          await pb.update
-            .collection('entries')
-            .id(entry.id)
-            .data({
-              wallet_entry_id: ''
-            })
-            .execute()
+        const transaction = await getWalletTransaction(
+          db,
+          entry.wallet_entry_id
+        ).catch(() => null)
+
+        if (!transaction) {
+          await db
+            .update(rentalPaymentEntries)
+            .set({ wallet_entry_id: '' })
+            .where(eq(rentalPaymentEntries.id, entry.id))
 
           cleanedEntries.push(entry.id)
         }
@@ -465,19 +456,17 @@ export const remove = forge
     description: 'Delete an entry',
     input: {
       query: z.object({
-        id: z.string()
+        id: forge.existsIn(z.string(), rentalPaymentEntries)
       })
     },
-    existenceCheck: {
-      query: { id: 'entries' }
-    },
     output: {
-      NO_CONTENT: true,
-      NOT_FOUND: true
+      NO_CONTENT: true
     }
   })
-  .callback(async ({ pb, query: { id }, response }) => {
-    await pb.delete.collection('entries').id(id).execute()
+  .callback(async ({ db, query: { id }, response }) => {
+    await db
+      .delete(rentalPaymentEntries)
+      .where(eq(rentalPaymentEntries.id, id))
 
     return response.noContent()
   })

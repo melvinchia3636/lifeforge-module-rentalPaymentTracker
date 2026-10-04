@@ -1,51 +1,63 @@
+import { eq } from 'drizzle-orm'
+import { createSelectSchema } from 'drizzle-orm/zod'
+
 import forge from '../forge'
-import schemas from '../schema'
+import { rentalPaymentSettings } from '../schema.drizzle'
+
+const settingsDto = createSelectSchema(rentalPaymentSettings)
+
+const settingsInputDto = settingsDto.omit({ id: true }).partial()
 
 export const get = forge
   .query({
     description: 'Get user settings',
     output: {
-      OK: schemas.settings
+      OK: settingsDto
     }
   })
   .callback(
     async ({
-      pb,
+      db,
       core: {
         validation: { checkModulesAvailability }
       },
       response
     }) => {
-      const existing = await pb.getFullList.collection('settings').execute()
+      const existing = await db.query.settings.findFirst()
 
-      if (existing.length > 0) {
-        const walletModuleAvailable = checkModulesAvailability('wallet')
+      if (existing) {
+        const walletAvailable = await checkModulesAvailability(
+          'lifeforge--wallet'
+        )
 
-        if (!walletModuleAvailable) {
-          return response.ok(
-            await pb.update
-              .collection('settings')
-              .id(existing[0].id)
-              .data({ link_with_wallet: false, wallet_template_id: '' })
-              .execute()
-          )
+        if (
+          !walletAvailable &&
+          (existing.link_with_wallet || existing.wallet_template_id)
+        ) {
+          const [updated] = await db
+            .update(rentalPaymentSettings)
+            .set({ link_with_wallet: false, wallet_template_id: '' })
+            .where(eq(rentalPaymentSettings.id, existing.id))
+            .returning()
+
+          return response.ok(updated)
         }
 
-        return response.ok(existing[0])
+        return response.ok(existing)
       }
 
-      return response.ok(
-        await pb.create
-          .collection('settings')
-          .data({
-            initial_prepayment: 0,
-            initial_meter_reading: 0,
-            electricity_rate: 0,
-            utility_bill: 0,
-            rental_fee: 0
-          })
-          .execute()
-      )
+      const [created] = await db
+        .insert(rentalPaymentSettings)
+        .values({
+          initial_prepayment: 0,
+          initial_meter_reading: 0,
+          electricity_rate: 0,
+          utility_bill: 0,
+          rental_fee: 0
+        })
+        .returning()
+
+      return response.ok(created)
     }
   )
 
@@ -53,26 +65,29 @@ export const update = forge
   .mutation({
     description: 'Update user settings',
     input: {
-      body: schemas.settings.partial()
+      body: settingsInputDto
     },
     output: {
-      OK: schemas.settings
+      OK: settingsDto
     }
   })
-  .callback(async ({ pb, body, response }) => {
-    const existing = await pb.getFullList.collection('settings').execute()
+  .callback(async ({ db, body, response }) => {
+    const existing = await db.query.settings.findFirst()
 
-    if (existing.length === 0) {
-      return response.ok(
-        await pb.create.collection('settings').data(body).execute()
-      )
+    if (!existing) {
+      const [created] = await db
+        .insert(rentalPaymentSettings)
+        .values(body)
+        .returning()
+
+      return response.ok(created)
     }
 
-    return response.ok(
-      await pb.update
-        .collection('settings')
-        .id(existing[0].id)
-        .data(body)
-        .execute()
-    )
+    const [updated] = await db
+      .update(rentalPaymentSettings)
+      .set(body)
+      .where(eq(rentalPaymentSettings.id, existing.id))
+      .returning()
+
+    return response.ok(updated)
   })

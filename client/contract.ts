@@ -93,8 +93,7 @@ export const contract = {
             "electricity_rate",
             "utility_bill",
             "rental_fee",
-            "amount_paid",
-            "wallet_entry_id"
+            "amount_paid"
           ],
           "additionalProperties": false
         }
@@ -104,29 +103,50 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "month": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "year": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "previous_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "current_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_used": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "meter_reading_image": {
               "type": "string"
@@ -135,28 +155,24 @@ export const contract = {
               "type": "string"
             },
             "amount_paid": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "wallet_entry_id": {
               "type": "string"
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "month",
             "year",
             "previous_meter_reading",
@@ -170,10 +186,7 @@ export const contract = {
             "amount_paid",
             "wallet_entry_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
         }
@@ -206,29 +219,50 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "month": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "year": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "previous_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "current_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_used": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "meter_reading_image": {
               "type": "string"
@@ -237,28 +271,24 @@ export const contract = {
               "type": "string"
             },
             "amount_paid": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "wallet_entry_id": {
               "type": "string"
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "month",
             "year",
             "previous_meter_reading",
@@ -272,14 +302,10 @@ export const contract = {
             "amount_paid",
             "wallet_entry_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
-        },
-        "NOT_FOUND": true
+        }
       }
     },
     "linkWalletTransaction": {
@@ -313,29 +339,50 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "month": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "year": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "previous_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "current_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_used": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "meter_reading_image": {
               "type": "string"
@@ -344,28 +391,24 @@ export const contract = {
               "type": "string"
             },
             "amount_paid": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "wallet_entry_id": {
               "type": "string"
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "month",
             "year",
             "previous_meter_reading",
@@ -379,19 +422,10 @@ export const contract = {
             "amount_paid",
             "wallet_entry_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
-        },
-        "CONFLICT": true,
-        "BAD_REQUEST": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "string"
-        },
-        "NOT_FOUND": true
+        }
       }
     },
     "list": {
@@ -409,29 +443,50 @@ export const contract = {
           "items": {
             "type": "object",
             "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
               "month": {
-                "type": "number"
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
               },
               "year": {
-                "type": "number"
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
               },
               "previous_meter_reading": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "current_meter_reading": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "electricity_used": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "electricity_rate": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "utility_bill": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "rental_fee": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "meter_reading_image": {
                 "type": "string"
@@ -440,28 +495,24 @@ export const contract = {
                 "type": "string"
               },
               "amount_paid": {
-                "type": "number"
+                "type": "number",
+                "minimum": -140737488355328,
+                "maximum": 140737488355327
               },
               "wallet_entry_id": {
                 "type": "string"
               },
               "created": {
-                "type": "string"
+                "type": "string",
+                "format": "date-time"
               },
               "updated": {
-                "type": "string"
-              },
-              "id": {
-                "type": "string"
-              },
-              "collectionId": {
-                "type": "string"
-              },
-              "collectionName": {
-                "type": "string"
+                "type": "string",
+                "format": "date-time"
               }
             },
             "required": [
+              "id",
               "month",
               "year",
               "previous_meter_reading",
@@ -475,10 +526,7 @@ export const contract = {
               "amount_paid",
               "wallet_entry_id",
               "created",
-              "updated",
-              "id",
-              "collectionId",
-              "collectionName"
+              "updated"
             ],
             "additionalProperties": false
           }
@@ -508,8 +556,7 @@ export const contract = {
         }
       },
       "output": {
-        "NO_CONTENT": true,
-        "NOT_FOUND": true
+        "NO_CONTENT": true
       }
     },
     "unlinkWalletTransaction": {
@@ -539,29 +586,50 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "month": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "year": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "previous_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "current_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_used": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "meter_reading_image": {
               "type": "string"
@@ -570,28 +638,24 @@ export const contract = {
               "type": "string"
             },
             "amount_paid": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "wallet_entry_id": {
               "type": "string"
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "month",
             "year",
             "previous_meter_reading",
@@ -605,18 +669,10 @@ export const contract = {
             "amount_paid",
             "wallet_entry_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
-        },
-        "BAD_REQUEST": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "string"
-        },
-        "NOT_FOUND": true
+        }
       }
     },
     "update": {
@@ -690,29 +746,50 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "month": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "year": {
-              "type": "number"
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
             },
             "previous_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "current_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_used": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "meter_reading_image": {
               "type": "string"
@@ -721,28 +798,24 @@ export const contract = {
               "type": "string"
             },
             "amount_paid": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "wallet_entry_id": {
               "type": "string"
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "month",
             "year",
             "previous_meter_reading",
@@ -756,14 +829,10 @@ export const contract = {
             "amount_paid",
             "wallet_entry_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
-        },
-        "NOT_FOUND": true
+        }
       }
     }
   },
@@ -781,48 +850,52 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "initial_prepayment": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "initial_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "link_with_wallet": {
               "type": "boolean"
             },
             "wallet_template_id": {
               "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
             }
           },
           "required": [
+            "id",
             "initial_prepayment",
             "initial_meter_reading",
             "electricity_rate",
             "utility_bill",
             "rental_fee",
             "link_with_wallet",
-            "wallet_template_id",
-            "id",
-            "collectionId",
-            "collectionName"
+            "wallet_template_id"
           ],
           "additionalProperties": false
         }
@@ -841,33 +914,34 @@ export const contract = {
           "type": "object",
           "properties": {
             "initial_prepayment": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "initial_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "link_with_wallet": {
               "type": "boolean"
             },
             "wallet_template_id": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
               "type": "string"
             }
           },
@@ -879,48 +953,52 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "initial_prepayment": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "initial_meter_reading": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "electricity_rate": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "utility_bill": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "rental_fee": {
-              "type": "number"
+              "type": "number",
+              "minimum": -140737488355328,
+              "maximum": 140737488355327
             },
             "link_with_wallet": {
               "type": "boolean"
             },
             "wallet_template_id": {
               "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
             }
           },
           "required": [
+            "id",
             "initial_prepayment",
             "initial_meter_reading",
             "electricity_rate",
             "utility_bill",
             "rental_fee",
             "link_with_wallet",
-            "wallet_template_id",
-            "id",
-            "collectionId",
-            "collectionName"
+            "wallet_template_id"
           ],
           "additionalProperties": false
         }
@@ -960,7 +1038,14 @@ export const contract = {
                 "type": "string"
               },
               "asset": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
               "category": {
                 "type": "object",
@@ -996,20 +1081,27 @@ export const contract = {
                 "type": "string"
               },
               "location_coords": {
-                "type": "object",
-                "properties": {
-                  "lat": {
-                    "type": "number"
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "lat": {
+                        "type": "number"
+                      },
+                      "lon": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "additionalProperties": false
                   },
-                  "lon": {
-                    "type": "number"
+                  {
+                    "type": "null"
                   }
-                },
-                "required": [
-                  "lat",
-                  "lon"
-                ],
-                "additionalProperties": false
+                ]
               }
             },
             "required": [
