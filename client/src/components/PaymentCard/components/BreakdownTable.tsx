@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { Trans } from 'react-i18next'
 
 import { useModuleTranslation } from '@lifeforge/localization'
-import { usePersonalization } from '@lifeforge/ui'
+import { Text, usePersonalization } from '@lifeforge/ui'
 
 import type { CalculatedPayment } from '@/utils/calculations'
 
@@ -22,7 +22,7 @@ function BreakdownTable({
   entry: PaymentEntry
   calculations: CalculatedPayment
 }) {
-  const { t } = useModuleTranslation()
+  const { t, ns } = useModuleTranslation()
   const { language } = usePersonalization()
 
   return (
@@ -59,7 +59,13 @@ function BreakdownTable({
             </span>
           </td>
           <td className={styles.totalValue}>
-            <div className={styles.totalDivider}>{totalPayable.toFixed(2)}</div>
+            <Text
+              as="div"
+              className={styles.totalDivider}
+              color={{ print: 'black' }}
+            >
+              {totalPayable.toFixed(2)}
+            </Text>
           </td>
         </tr>
 
@@ -71,10 +77,7 @@ function BreakdownTable({
         </tr>
         <tr className={styles.row}>
           <td className={styles.label}>
-            <Trans
-              i18nKey="paymentCard.lessTotalPayable"
-              ns="apps.melvinchia3636--rental-payment-tracker"
-            />
+            <Trans i18nKey="paymentCard.lessTotalPayable" ns={ns} />
           </td>
           <td className={`${styles.value} ${styles.borderBottom}`}>
             ({totalPayable.toFixed(2)})
@@ -121,11 +124,15 @@ function BreakdownTable({
             </span>
           </td>
           <td className={styles.totalValue}>
-            <div className={styles.totalDivider}>
+            <Text
+              as="div"
+              className={styles.totalDivider}
+              color={{ print: 'black' }}
+            >
               {currentPrepayment >= 0
                 ? currentPrepayment.toFixed(2)
                 : `(${Math.abs(currentPrepayment).toFixed(2)})`}
-            </div>
+            </Text>
           </td>
         </tr>
       </tbody>

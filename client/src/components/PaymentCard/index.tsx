@@ -27,6 +27,7 @@ export default function PaymentCard({ entry, calculations }: PaymentCardProps) {
         bg={{ print: 'transparent' }}
         overflow="hidden"
         p="none"
+        r={{ base: 'md', print: 'none' }}
       >
         <Header
           breakdownCollapsed={breakdownCollapsed}

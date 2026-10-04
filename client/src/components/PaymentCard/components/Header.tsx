@@ -117,7 +117,12 @@ function Header({
       }}
     >
       <div>
-        <Text as="h3" size={{ base: 'xl', print: '2xl' }} weight="semibold">
+        <Text
+          as="h3"
+          color={{ print: 'black' }}
+          size={{ base: 'xl', print: '2xl' }}
+          weight="semibold"
+        >
           {dayjs()
             .month(entry.month - 1)
             .year(entry.year)
