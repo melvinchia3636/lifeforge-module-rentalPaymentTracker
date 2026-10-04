@@ -101,7 +101,8 @@
     "linkedWalletTransaction": "已關聯的錢包交易"
   },
   "widgets": {
-    "prepaidAmount": "預付金額"
+    "prepaidAmount": "預付金額",
+    "totalRentPaid": "已付租金總額"
   },
   "toast": {
     "deletePaymentEntryFailed": "刪除支付記錄失敗。",

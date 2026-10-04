@@ -101,7 +101,8 @@
     "linkedWalletTransaction": "Linked Wallet Transaction"
   },
   "widgets": {
-    "prepaidAmount": "Prepaid Amount"
+    "prepaidAmount": "Prepaid Amount",
+    "totalRentPaid": "Total Rent Paid"
   },
   "toast": {
     "deletePaymentEntryFailed": "Failed to delete the payment entry.",

@@ -101,7 +101,8 @@
     "linkedWalletTransaction": "Transaksi Dompet yang Dipautkan"
   },
   "widgets": {
-    "prepaidAmount": "Jumlah Prabayar"
+    "prepaidAmount": "Jumlah Prabayar",
+    "totalRentPaid": "Jumlah Sewa Dibayar"
   },
   "toast": {
     "deletePaymentEntryFailed": "Gagal memadam entri pembayaran.",

@@ -115,6 +115,15 @@ function RentalPaymentTracker() {
     )
   }, [entriesQuery.data, settingsQuery.data, walletAmounts])
 
+  const totalPaid = useMemo(
+    () =>
+      Array.from(calculations.values()).reduce(
+        (sum, calc) => sum + calc.amountPaid,
+        0
+      ),
+    [calculations]
+  )
+
   return (
     <>
       <ModuleHeader
@@ -181,6 +190,22 @@ function RentalPaymentTracker() {
                           .currentPrepayment
                       : 0
                   }
+                  display={{ base: 'flex', sm: 'none' }}
+                />
+              </Widget>
+              <Widget
+                actionComponent={
+                  <Amount
+                    amount={totalPaid}
+                    display={{ base: 'none', sm: 'flex' }}
+                  />
+                }
+                icon="tabler:cash"
+                mb="lg"
+                title="Total Rent Paid"
+              >
+                <Amount
+                  amount={totalPaid}
                   display={{ base: 'flex', sm: 'none' }}
                 />
               </Widget>
