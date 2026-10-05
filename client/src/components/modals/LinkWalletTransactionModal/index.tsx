@@ -12,7 +12,6 @@ import {
   Scrollbar,
   SearchInput,
   WithQuery,
-  surface,
   toast
 } from '@lifeforge/ui'
 
@@ -94,7 +93,6 @@ function LinkWalletTransactionModal({
         onClose={onClose}
       />
       <SearchInput
-        bg={surface.lightInteractive}
         debounceMs={300}
         searchTarget="transaction"
         value={searchQuery}
